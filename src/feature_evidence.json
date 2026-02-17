@@ -1,0 +1,63 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-a-manual-notifications-admin-page-in-the-frontend-that-lets-the-site-owner-view-incoming-cab-booking-requests-as-a-list-most-recent-first-including-booking-reference-id-customer-name-customer-phone-and-booking-timestamp-with-a-visible-loading-state-empty-state-and-a-manual-refresh-action",
+      "featureTitle": "Add a manual notifications/admin page in the frontend that lets the site owner view incoming cab booking requests as a list (most recent first), including booking reference ID, customer name, customer phone, and booking timestamp, with a visible loading state, empty state, and a manual refresh action.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/NotificationsAdminView.tsx",
+        "frontend/src/hooks/useBookingsWithIds.ts",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-remove-the-tempo-traveller-option-from-the-vehicle-pricing-section-and-from-the-booking-flow-vehicle-selection-so-users-can-only-choose-sedan-or-suv",
+      "featureTitle": "Remove the Tempo Traveller option from the vehicle/pricing section and from the booking flow vehicle selection so users can only choose Sedan or SUV.",
+      "files": [
+        "frontend/src/components/BookingForm.tsx",
+        "frontend/src/components/VehiclePricingSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-static-vehicle-set-image-used-in-the-vehicle-pricing-section-so-it-no-longer-includes-a-tempo-traveller-and-update-the-frontend-to-use-the-updated-asset-filename-from-frontend-public-assets-generated",
+      "featureTitle": "Update the static vehicle set image used in the vehicle/pricing section so it no longer includes a Tempo Traveller, and update the frontend to use the updated asset filename from `frontend/public/assets/generated`.",
+      "files": [
+        "frontend/src/components/VehiclePricingSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

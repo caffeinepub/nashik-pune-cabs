@@ -1,0 +1,108 @@
+{
+  "kind": "build_request",
+  "title": "Add manual notifications page and remove Tempo Traveller option",
+  "projectName": "Nashik Pune Cabs",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-7",
+      "text": "Add a manual notifications/admin page in the frontend that lets the site owner view incoming cab booking requests as a list (most recent first), including booking reference ID, customer name, customer phone, and booking timestamp, with a visible loading state, empty state, and a manual refresh action.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "add a manual notifications page"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new UI entry point exists in the header (or a clearly visible section link) that opens a Notifications/Admin view without leaving the app.",
+        "The Notifications/Admin view fetches bookings from the backend and renders them in a readable list/table with: reference ID, name, phone, and formatted timestamp.",
+        "The view shows a loading indicator while fetching, an empty state message when there are no bookings, and a 'Refresh' control that refetches the list on demand.",
+        "Bookings are displayed in reverse chronological order (newest first)."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Update the backend canister API to support the manual notifications page by providing a query method that returns bookings together with their booking reference IDs (not just booking values), ordered by timestamp (newest first).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "where should i get notification that someone has booked a cab",
+          "add a manual notifications page"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes a query method that returns an array containing each booking's reference ID together with its booking details (name, phone, timestamp).",
+        "The returned list is sorted with newest bookings first.",
+        "Frontend Notifications/Admin view uses this method so it can display booking reference IDs alongside booking details."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Remove the Tempo Traveller option from the vehicle/pricing section and from the booking flow vehicle selection so users can only choose Sedan or SUV.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "remove the tempo traverller"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Tempo Traveller card is removed from `frontend/src/components/VehiclePricingSection.tsx` so only Sedan and SUV are shown.",
+        "The Tempo Traveller option is removed from the 'Car Type' select in `frontend/src/components/BookingForm.tsx` so it cannot be selected.",
+        "If any existing UI text references 'tempo traveller' (e.g., image alt text in the vehicle section), it is updated to match the remaining vehicle options."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Update the static vehicle set image used in the vehicle/pricing section so it no longer includes a Tempo Traveller, and update the frontend to use the updated asset filename from `frontend/public/assets/generated`.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "remove the tempo traverller"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new generated static image exists under `frontend/public/assets/generated` that visually matches the current style but includes only Sedan and SUV.",
+        "`frontend/src/components/VehiclePricingSection.tsx` references the updated image filename, and the rendered image no longer depicts a Tempo Traveller."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor in `backend/main.mo` (no additional backend services).",
+    "Do not edit files under `frontend/src/components/ui` or other `frontend.immutablePaths`; compose existing UI components instead.",
+    "Do not add email/SMS/push notification integrations; the notifications page is a manual, in-app view only.",
+    "Store and serve generated images as static files under `frontend/public/assets/generated` and reference them directly from the frontend."
+  ],
+  "nonGoals": [
+    "Implementing real-time notifications (WebSockets, push notifications, live updates).",
+    "Adding third-party authentication/authorization beyond the existing Internet Identity setup.",
+    "Adding external databases or exporting bookings to external systems."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": [
+      "Remove the tempo traveller vehicle from the fleet illustration (vehicle-set.dim_1200x400.png > vehicle-set-no-tempo.dim_1200x400.png)"
+    ]
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

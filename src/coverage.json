@@ -1,0 +1,89 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-17T05:16:09.875Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 3,
+    "items": [
+      {
+        "id": "REQ-10",
+        "summary": "Update the static vehicle set image used in the vehicle/pricing section so it no longer includes a Tempo Traveller, and update the frontend to use the updated asset filename from `frontend/public/assets/generated`.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/vehicle-set-no-tempo.dim_1200x400.png",
+          "frontend/src/components/VehiclePricingSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/vehicle-set-no-tempo.dim_1200x400.png",
+          "frontend/src/components/VehiclePricingSection.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Add a manual notifications/admin page in the frontend that lets the site owner view incoming cab booking requests as a list (most recent first), including booking reference ID, customer name, customer phone, and booking timestamp, with a visible loading state, empty state, and a manual refresh action.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/NotificationsAdminView.tsx",
+          "frontend/src/hooks/useBookingsWithIds.ts",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/NotificationsAdminView.tsx",
+          "frontend/src/hooks/useBookingsWithIds.ts",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Update the backend canister API to support the manual notifications page by providing a query method that returns bookings together with their booking reference IDs (not just booking values), ordered by timestamp (newest first).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Remove the Tempo Traveller option from the vehicle/pricing section and from the booking flow vehicle selection so users can only choose Sedan or SUV.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/VehiclePricingSection.tsx",
+          "frontend/src/components/BookingForm.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/VehiclePricingSection.tsx",
+          "frontend/src/components/BookingForm.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "build-template/README.md",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/public/assets/generated/vehicle-set-no-tempo.dim_1200x400.png",
+    "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/BookingForm.tsx",
+    "frontend/src/components/NotificationsAdminView.tsx",
+    "frontend/src/components/VehiclePricingSection.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useBookingsWithIds.ts",
+    "frontend/src/hooks/useCreateBooking.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

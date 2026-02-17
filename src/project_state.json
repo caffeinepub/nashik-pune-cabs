@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Build a cab booking service website for Nashik to Pune, closely matching the referenced oneway.cab page.",
+  "architectural_notes": [
+    "Add a simple internal/admin route/page that reads bookings from the backend canister and renders a bookings list for manual checking (no email/SMS notifications)."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Edit Images\n- Remove the tempo traveller vehicle from the fleet illustration (vehicle-set.dim_1200x400.png > vehicle-set-no-tempo.dim_1200x400.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-a-single-page-marketing-booking-website-for-the-nashik-pune-taxi-route-that-closely-matches-the-structure-and-content-style-of-https-oneway-cab-nashik-nashik-to-pune-taxi-html-hero-booking-form-pricing-vehicle-options-key-highlights-route-information-faqs-and-footer-contact-sections-while-using-original-wording-and-assets",
+      "title": "Create a single-page marketing + booking website for the Nashik → Pune taxi route that closely matches the structure and content style of https://oneway.cab/nashik/nashik-to-pune-taxi.html (hero, booking form, pricing/vehicle options, key highlights, route information, FAQs, and footer contact sections) while using original wording and assets.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-booking-submission-from-the-frontend-validate-booking-form-inputs-submit-to-the-backend-canister-and-show-an-on-screen-confirmation-state-containing-a-generated-booking-reference-id-and-a-summary-of-the-entered-trip-details",
+      "title": "Implement booking submission from the frontend: validate booking form inputs, submit to the backend canister, and show an on-screen confirmation state containing a generated booking reference ID and a summary of the entered trip details.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-seo-and-trust-elements-typical-of-the-referenced-landing-page-route-specific-page-title-meta-description-prominent-contact-cta-tel-link-and-a-simple-trust-strip-e-g-24-7-support-transparent-pricing-verified-drivers",
+      "title": "Add basic SEO and trust elements typical of the referenced landing page: route-specific page title/meta description, prominent contact CTA (tel link), and a simple trust strip (e.g., “24/7 Support”, “Transparent Pricing”, “Verified Drivers”).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-direction-apply-a-cohesive-travel-transport-themed-visual-style-not-blue-purple-using-tailwind-e-g-warm-charcoal-saffron-accents-bold-typographic-hierarchy-card-based-sections-and-keep-it-consistent-across-all-components",
+      "title": "Design direction: apply a cohesive, travel/transport-themed visual style (not blue/purple) using Tailwind (e.g., warm charcoal + saffron accents, bold typographic hierarchy, card-based sections) and keep it consistent across all components.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-and-render-custom-static-images-for-the-hero-and-vehicle-pricing-section-store-true-static-assets-under-frontend-public-assets-generated-and-reference-them-directly-from-the-frontend",
+      "title": "Add and render custom static images for the hero and vehicle/pricing section; store true static assets under frontend/public/assets/generated and reference them directly from the frontend.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-manual-notifications-admin-page-in-the-frontend-that-lets-the-site-owner-view-incoming-cab-booking-requests-as-a-list-most-recent-first-including-booking-reference-id-customer-name-customer-phone-and-booking-timestamp-with-a-visible-loading-state-empty-state-and-a-manual-refresh-action",
+      "title": "Add a manual notifications/admin page in the frontend that lets the site owner view incoming cab booking requests as a list (most recent first), including booking reference ID, customer name, customer phone, and booking timestamp, with a visible loading state, empty state, and a manual refresh action.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-tempo-traveller-option-from-the-vehicle-pricing-section-and-from-the-booking-flow-vehicle-selection-so-users-can-only-choose-sedan-or-suv",
+      "title": "Remove the Tempo Traveller option from the vehicle/pricing section and from the booking flow vehicle selection so users can only choose Sedan or SUV.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-static-vehicle-set-image-used-in-the-vehicle-pricing-section-so-it-no-longer-includes-a-tempo-traveller-and-update-the-frontend-to-use-the-updated-asset-filename-from-frontend-public-assets-generated",
+      "title": "Update the static vehicle set image used in the vehicle/pricing section so it no longer includes a Tempo Traveller, and update the frontend to use the updated asset filename from `frontend/public/assets/generated`.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a Nashik-to-Pune cab booking service website closely matching https://oneway.cab/nashik/nashik-to-pune-taxi.html",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Backend: add a Booking model and canister methods to create and store booking requests for Nashik → Pune trips, including timestamps and status (e.g., “Pending”).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add a manual notifications/admin page to view incoming cab booking requests (list of bookings)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Remove the Tempo Traveller option from the vehicle/pricing section (and related vehicle assets)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Update the backend canister API to support the manual notifications page by providing a query method that returns bookings together with their booking reference IDs (not just booking values), ordered by timestamp (newest first).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Nashik Pune Cabs",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

@@ -1,0 +1,80 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Add Notifications/Admin view and remove Tempo Traveller option",
+  "requirements": [
+    {
+      "id": "REQ-7",
+      "summary": "Add an in-app Notifications/Admin view to list incoming bookings with loading/empty states and manual refresh, and add a header entry point to open it.",
+      "acceptanceCriteria": [
+        "A new UI entry point exists in the header (or a clearly visible section link) that opens a Notifications/Admin view without leaving the app.",
+        "The Notifications/Admin view fetches bookings from the backend and renders them in a readable list/table with: reference ID, name, phone, and formatted timestamp.",
+        "The view shows a loading indicator while fetching, an empty state message when there are no bookings, and a 'Refresh' control that refetches the list on demand.",
+        "Bookings are displayed in reverse chronological order (newest first)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NotificationsAdminView.tsx",
+          "operation": "create",
+          "description": "Create a Notifications/Admin view component that renders bookings (reference ID, customer name, customer phone, formatted timestamp) in a readable list/table with loading state, empty state, and a Refresh action. Use shadcn-ui components (e.g., Card/Button and, if available, Table) to keep styling consistent; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useBookingsWithIds.ts",
+          "operation": "create",
+          "description": "Add a react-query hook that uses the actor to fetch bookings via the backend function that returns [referenceId, booking] pairs already sorted newest-first; expose query state (data/loading/error) and a refetch method for manual refresh."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Update/extend existing query hooks to align with the current backend interface (including the method that returns bookings with reference IDs sorted newest-first) and to avoid calling non-existent booking fetch functions."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the Notifications/Admin view into the app without navigation away (e.g., toggle a view/state or render it conditionally) and add a clearly visible header entry point to open/close it. Use shadcn-ui Button for the entry point to match existing UI; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Remove Tempo Traveller from the vehicle/pricing section and from booking flow car type selection; update any remaining UI text referencing it.",
+      "acceptanceCriteria": [
+        "The Tempo Traveller card is removed from `frontend/src/components/VehiclePricingSection.tsx` so only Sedan and SUV are shown.",
+        "The Tempo Traveller option is removed from the 'Car Type' select in `frontend/src/components/BookingForm.tsx` so it cannot be selected.",
+        "If any existing UI text references 'tempo traveller' (e.g., image alt text in the vehicle section), it is updated to match the remaining vehicle options."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/VehiclePricingSection.tsx",
+          "operation": "modify",
+          "description": "Remove the Tempo Traveller entry from the vehicles list, adjust the grid/layout as needed for two vehicle cards, and update any copy/alt text to reference only Sedan and SUV."
+        },
+        {
+          "path": "frontend/src/components/BookingForm.tsx",
+          "operation": "modify",
+          "description": "Remove the Tempo Traveller option from the 'Car Type' Select so users can only choose Sedan or SUV, and ensure default/validation behavior remains correct."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Replace the vehicle/pricing section fleet image with an updated generated asset that no longer shows a Tempo Traveller and update the component to reference the new filename.",
+      "acceptanceCriteria": [
+        "A new generated static image exists under `frontend/public/assets/generated` that visually matches the current style but includes only Sedan and SUV.",
+        "`frontend/src/components/VehiclePricingSection.tsx` references the updated image filename, and the rendered image no longer depicts a Tempo Traveller."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/vehicle-set-no-tempo.dim_1200x400.png",
+          "operation": "create",
+          "description": "Add the updated generated static image asset (edit of the existing vehicle-set) that visually matches current style but includes only Sedan and SUV: frontend/public/assets/generated/vehicle-set-no-tempo.dim_1200x400.png."
+        },
+        {
+          "path": "frontend/src/components/VehiclePricingSection.tsx",
+          "operation": "modify",
+          "description": "Update the vehicle set image reference to use frontend/public/assets/generated/vehicle-set-no-tempo.dim_1200x400.png and ensure accompanying alt text matches Sedan and SUV only."
+        }
+      ]
+    }
+  ]
+}

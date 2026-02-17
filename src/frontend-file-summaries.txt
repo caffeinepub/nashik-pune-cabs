@@ -1,0 +1,18 @@
+{
+  "frontend/src/App.tsx": "Main application component with header containing notifications sheet trigger, hero section, booking form/confirmation toggle, and all landing page sections including vehicle pricing, highlights, route info, FAQs, and footer.",
+  "frontend/src/components/BookingForm.tsx": "Comprehensive booking form component with client-side validation for all required fields (pickup, drop, date, time, trip type, car type limited to Sedan and SUV only, name, phone) and React Query mutation integration for backend submission.",
+  "frontend/src/components/BookingConfirmation.tsx": "Success confirmation component displaying booking reference ID and complete trip summary with formatted date/time, passenger details, and next steps information.",
+  "frontend/src/components/VehiclePricingSection.tsx": "Vehicle pricing cards section showcasing only sedan and SUV options with capacity, features, and approximate pricing information, using the updated vehicle-set-no-tempo image.",
+  "frontend/src/components/HighlightsSection.tsx": "Service highlights grid displaying six key benefits (24/7 availability, verified drivers, transparent pricing, door-to-door service, easy booking, premium comfort) with icons and descriptions.",
+  "frontend/src/components/RouteInfoSection.tsx": "Route information section with distance/duration stats and popular pickup/drop points in Nashik and Pune, styled with dark charcoal background.",
+  "frontend/src/components/FaqSection.tsx": "Accordion-based FAQ section with eight common questions and answers about the Nashik to Pune cab service.",
+  "frontend/src/components/TrustStrip.tsx": "Horizontal trust indicators strip displaying four key trust signals (verified drivers, 24/7 support, transparent pricing, happy customers) with icons.",
+  "frontend/src/components/FooterContact.tsx": "Comprehensive footer with company info, quick links, contact details, service hours, social media links, and caffeine.ai attribution with UTM tracking.",
+  "frontend/src/hooks/useCreateBooking.ts": "React Query mutation hook for creating bookings via the backend actor, extracting the booking ID from the response string and invalidating the bookings-with-ids query cache.",
+  "frontend/src/hooks/useQueries.ts": "React Query hook for fetching bookings with IDs sorted by timestamp, using the backend's getAllBookingsWithIdsSorted method.",
+  "frontend/src/index.css": "Global styles with OKLCH color system defining warm charcoal and saffron accent palette for both light and dark modes, plus typography and utility classes.",
+  "frontend/tailwind.config.js": "Tailwind configuration extending the theme with custom saffron and charcoal colors, Inter font family, and maintaining all shadcn/ui design tokens.",
+  "frontend/index.html": "HTML entry point with SEO-optimized title and meta description for the Nashik to Pune taxi service landing page.",
+  "frontend/src/components/NotificationsAdminView.tsx": "Admin notifications view component that displays all bookings in a table with reference ID, name, phone, and formatted timestamp, includes loading state, empty state, error handling, and manual refresh button.",
+  "frontend/src/hooks/useBookingsWithIds.ts": "React Query hook that fetches all bookings with their reference IDs sorted newest-first from the backend using getAllBookingsWithIdsSorted method."
+}
