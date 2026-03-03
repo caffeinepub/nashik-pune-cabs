@@ -1,0 +1,137 @@
+{
+  "kind": "build_request",
+  "title": "Add stops, customize price, remove luxury, Pune locations, luggage/seats in customer details, booking info display",
+  "projectName": "Nashik Pune Cabs",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Add a 'Stops' feature to the booking form that allows customers to input one or more intermediate stop locations along the route. Include an 'Add Stop' button that dynamically appends additional location input fields, and a remove button for each stop. Store stop data as part of the booking record in the backend.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "add stops feature"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Booking form shows an 'Add Stop' button below the pickup/drop fields",
+        "Clicking 'Add Stop' appends a new text input for a stop location",
+        "Each stop input has a remove/delete button",
+        "Stop data is submitted with the booking and stored in the backend",
+        "Admin bookings view displays any stops associated with a booking"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add a customizable price field to the booking form or admin panel that allows setting or overriding the fare for a route. The price should be configurable per booking or per car category, and displayed to the customer during booking.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "customize price"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A price/fare field is visible in the booking flow showing estimated or custom price",
+        "Admin can set or override the price for a booking or route",
+        "Custom price is stored in the booking record",
+        "Customer sees the price clearly before submitting the booking"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Remove the 'Luxury' car category from the booking form's car type/category selection. Only Sedan and SUV (and any other non-luxury) categories should remain as options.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "remove luxary category"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Luxury category option is no longer visible in the car category selector",
+        "Selecting a car type only shows non-luxury options (e.g., Sedan, SUV)",
+        "VehiclePricingSection does not display a luxury vehicle card"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Apply the same pickup/drop location options and route setup used for Nashik to the Pune location. The Pune pickup and drop location dropdowns should have the same popular points, search functionality, and preset quick-link options as Nashik.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "do the same as nashik location to the pune location"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Pune pickup dropdown has the same searchable location list as Nashik",
+        "Pune drop dropdown mirrors the Nashik drop location options",
+        "Quick links for Pune routes are present and functional",
+        "Route info section includes Pune-centric popular pickup/drop points"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add 'Number of Seats' and 'Luggage' fields to the customer/passenger details section of the booking form. These should allow the customer to specify how many seats they need and how much luggage they are carrying. Store these values in the booking record.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "what about the luggage and no of seats in the customer details"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Customer details section includes a 'Number of Seats' input (numeric, with min/max based on car category capacity)",
+        "Customer details section includes a 'Luggage' input or selector (e.g., number of bags or size)",
+        "Both values are submitted with the booking and stored in the backend",
+        "Admin booking view shows luggage and seat count for each booking"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add a clearly visible 'Booking Info' or 'My Booking' section accessible from the landing page where customers can look up their booking details by entering their booking reference ID or phone number. Display the booking summary including route, stops, car type, date/time, passenger details, luggage, seats, and price.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "tell me where should i see the booking info"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A 'Track / View Booking' button or section is visible on the landing page",
+        "Customer can enter their booking reference ID or phone number to retrieve booking info",
+        "Retrieved booking displays: route, stops, date, time, car type, passenger name, phone, luggage, seat count, and price",
+        "A clear message is shown if no booking is found for the provided reference"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui",
+    "All Motoko logic must remain in the single backend/main.mo actor",
+    "Luxury category must be fully removed from both UI and backend variant types if applicable"
+  ],
+  "nonGoals": [
+    "Real-time booking tracking or live driver location",
+    "Payment gateway integration",
+    "SMS or email notifications for booking confirmation",
+    "Multi-language support"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

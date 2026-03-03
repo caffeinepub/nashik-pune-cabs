@@ -1,0 +1,131 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-03-02T06:12:38.553Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 6,
+    "implemented": 6,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Add a 'Stops' feature to the booking form that allows customers to input one or more intermediate stop locations along the route. Include an 'Add Stop' button that dynamically appends additional location input fields, and a remove button for each stop. Store stop data as part of the booking record in the backend.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/hooks/useCreateBooking.ts",
+          "frontend/src/components/NotificationsAdminView.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/hooks/useCreateBooking.ts",
+          "frontend/src/components/NotificationsAdminView.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Add a customizable price field to the booking form or admin panel that allows setting or overriding the fare for a route. The price should be configurable per booking or per car category, and displayed to the customer during booking.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/hooks/useCreateBooking.ts",
+          "frontend/src/components/NotificationsAdminView.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/hooks/useCreateBooking.ts",
+          "frontend/src/components/NotificationsAdminView.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Remove the 'Luxury' car category from the booking form's car type/category selection. Only Sedan and SUV (and any other non-luxury) categories should remain as options.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/components/VehiclePricingSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BookingForm.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Apply the same pickup/drop location options and route setup used for Nashik to the Pune location. The Pune pickup and drop location dropdowns should have the same popular points, search functionality, and preset quick-link options as Nashik.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/components/QuickLinksSection.tsx",
+          "frontend/src/components/RouteInfoSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/components/QuickLinksSection.tsx",
+          "frontend/src/components/RouteInfoSection.tsx"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Add 'Number of Seats' and 'Luggage' fields to the customer/passenger details section of the booking form. These should allow the customer to specify how many seats they need and how much luggage they are carrying. Store these values in the booking record.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/hooks/useCreateBooking.ts",
+          "frontend/src/components/NotificationsAdminView.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BookingForm.tsx",
+          "frontend/src/hooks/useCreateBooking.ts",
+          "frontend/src/components/NotificationsAdminView.tsx"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Add a clearly visible 'Booking Info' or 'My Booking' section accessible from the landing page where customers can look up their booking details by entering their booking reference ID or phone number. Display the booking summary including route, stops, car type, date/time, passenger details, luggage, seats, and price.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BookingLookup.tsx",
+          "frontend/src/hooks/useFindBookingByPhone.ts",
+          "frontend/src/hooks/useGetBookingById.ts",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BookingLookup.tsx",
+          "frontend/src/hooks/useFindBookingByPhone.ts",
+          "frontend/src/hooks/useGetBookingById.ts",
+          "frontend/src/App.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/BookingConfirmation.tsx",
+    "frontend/src/components/BookingForm.tsx",
+    "frontend/src/components/BookingLookup.tsx",
+    "frontend/src/components/NotificationsAdminView.tsx",
+    "frontend/src/components/QuickLinksSection.tsx",
+    "frontend/src/components/RouteInfoSection.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useCreateBooking.ts",
+    "frontend/src/hooks/useFindBookingByPhone.ts",
+    "frontend/src/hooks/useGetBookingById.ts",
+    "frontend/src/plain/booking.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

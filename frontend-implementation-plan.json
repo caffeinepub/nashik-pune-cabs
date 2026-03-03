@@ -1,0 +1,169 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Add stops, customize price, remove luxury, Pune locations, luggage/seats in customer details, booking info display",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add a 'Stops' feature to the booking form with dynamic add/remove controls for intermediate locations",
+      "acceptanceCriteria": [
+        "Booking form shows an 'Add Stop' button below the pickup/drop fields",
+        "Clicking 'Add Stop' appends a new text input for a stop location",
+        "Each stop input has a remove/delete button",
+        "Stop data is submitted with the booking and stored in the backend",
+        "Admin bookings view displays any stops associated with a booking"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BookingForm.tsx",
+          "operation": "modify",
+          "description": "Add state management for dynamic stops array using useState. Below the pickup/drop location selects, add an 'Add Stop' button that appends new stop entries. For each stop, render a text input with a remove button. Pass the stops array to the useCreateBooking hook when submitting the booking."
+        },
+        {
+          "path": "frontend/src/hooks/useCreateBooking.ts",
+          "operation": "modify",
+          "description": "Update the mutation to accept a stops parameter (array of strings) and pass it to the backend's createBookingWithStops method. Update the mutation function signature to include stops in the booking data payload."
+        },
+        {
+          "path": "frontend/src/components/NotificationsAdminView.tsx",
+          "operation": "modify",
+          "description": "Add a 'Stops' column to the bookings table that displays the stops array for each booking. Format the stops as a comma-separated list or numbered list for readability."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Add a customizable price field that displays and allows setting fare per booking",
+      "acceptanceCriteria": [
+        "A price/fare field is visible in the booking flow showing estimated or custom price",
+        "Admin can set or override the price for a booking or route",
+        "Custom price is stored in the booking record",
+        "Customer sees the price clearly before submitting the booking"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BookingForm.tsx",
+          "operation": "modify",
+          "description": "Add a price input field (numeric) to the booking form that defaults to an estimated price based on selected car category. Allow users to see and optionally modify the price before submission. Pass the price value to the useCreateBooking hook when submitting."
+        },
+        {
+          "path": "frontend/src/hooks/useCreateBooking.ts",
+          "operation": "modify",
+          "description": "Update the mutation to accept a price parameter (bigint) and pass it to the backend's createBookingWithStops method. Ensure the price is properly converted to bigint before calling the backend."
+        },
+        {
+          "path": "frontend/src/components/NotificationsAdminView.tsx",
+          "operation": "modify",
+          "description": "Add a 'Price' column to the bookings table displaying the booking price in rupees. Format the bigint value as a readable currency amount."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Remove the 'Luxury' car category from the booking form's car type selection",
+      "acceptanceCriteria": [
+        "The Luxury category option is no longer visible in the car category selector",
+        "Selecting a car type only shows non-luxury options (e.g., Sedan, SUV)",
+        "VehiclePricingSection does not display a luxury vehicle card"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BookingForm.tsx",
+          "operation": "modify",
+          "description": "Remove 'luxury' from the car category options in the category selector dropdown. Filter out any luxury-related car models from the model selection. Ensure that only sedan, suv, and hatchback categories remain available."
+        },
+        {
+          "path": "frontend/src/components/VehiclePricingSection.tsx",
+          "operation": "modify",
+          "description": "Remove any luxury vehicle pricing cards from the display. Keep only the sedan and SUV cards visible. Update any references to luxury vehicles in pricing or feature descriptions."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Apply Nashik pickup/drop location options and route setup to Pune location",
+      "acceptanceCriteria": [
+        "Pune pickup dropdown has the same searchable location list as Nashik",
+        "Pune drop dropdown mirrors the Nashik drop location options",
+        "Quick links for Pune routes are present and functional",
+        "Route info section includes Pune-centric popular pickup/drop points"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BookingForm.tsx",
+          "operation": "modify",
+          "description": "Update the pickup and drop location dropdowns to include Pune-specific location options mirroring the structure used for Nashik. Add search functionality for Pune locations matching the existing Nashik implementation. Ensure both Nashik and Pune locations are available as origin/destination options."
+        },
+        {
+          "path": "frontend/src/components/QuickLinksSection.tsx",
+          "operation": "modify",
+          "description": "Add quick-link buttons for Pune routes (e.g., 'Pune → Nashik', 'Pune → Mumbai Airport') with the same preset booking data structure as the existing Nashik quick links. Include popular Pune-originating routes."
+        },
+        {
+          "path": "frontend/src/components/RouteInfoSection.tsx",
+          "operation": "modify",
+          "description": "Add Pune-centric popular pickup and drop points to the route details display. Include Pune distance and duration information alongside existing Nashik route info. Make the section dynamically show relevant info based on selected origin city."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add 'Number of Seats' and 'Luggage' fields to the customer details section",
+      "acceptanceCriteria": [
+        "Customer details section includes a 'Number of Seats' input (numeric, with min/max based on car category capacity)",
+        "Customer details section includes a 'Luggage' input or selector (e.g., number of bags or size)",
+        "Both values are submitted with the booking and stored in the backend",
+        "Admin booking view shows luggage and seat count for each booking"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BookingForm.tsx",
+          "operation": "modify",
+          "description": "Add 'Number of Seats' numeric input with min/max validation based on selected car category capacity (e.g., 4 for sedan, 7 for SUV). Add 'Luggage' input fields for count (number) and details (text) to capture luggage information. Include both values in the booking submission payload."
+        },
+        {
+          "path": "frontend/src/hooks/useCreateBooking.ts",
+          "operation": "modify",
+          "description": "Update the mutation to accept seats (bigint) and luggage (object with count: bigint and details: string) parameters. Pass these values to the backend's createBookingWithStops method matching the backend interface signature."
+        },
+        {
+          "path": "frontend/src/components/NotificationsAdminView.tsx",
+          "operation": "modify",
+          "description": "Add 'Seats' and 'Luggage' columns to the bookings table. Display seat count as a number and luggage as 'X bags - details' format for easy reading by admins."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Add a 'Booking Info' lookup section on the landing page for customers to retrieve booking details",
+      "acceptanceCriteria": [
+        "A 'Track / View Booking' button or section is visible on the landing page",
+        "Customer can enter their booking reference ID or phone number to retrieve booking info",
+        "Retrieved booking displays: route, stops, date, time, car type, passenger name, phone, luggage, seat count, and price",
+        "A clear message is shown if no booking is found for the provided reference"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BookingLookup.tsx",
+          "operation": "create",
+          "description": "Create a new component that renders a booking lookup form with input fields for booking reference ID or phone number and a search button. Display the retrieved booking details (route, stops, date, time, car type, passenger name, phone, luggage, seats, price) in a card format. Show a 'Booking not found' message when no results are returned. Include error handling for failed lookups."
+        },
+        {
+          "path": "frontend/src/hooks/useFindBookingByPhone.ts",
+          "operation": "create",
+          "description": "Create a React Query mutation hook that calls the backend's findBookingByPhone method with the provided phone number. Return the booking data tuple [bookingId, Booking] or null if not found. Handle authorization errors gracefully."
+        },
+        {
+          "path": "frontend/src/hooks/useGetBookingById.ts",
+          "operation": "create",
+          "description": "Create a React Query query hook that calls the backend's getBookingById method with the provided booking reference ID. Return the Booking object or null if not found. Enable the query only when a booking ID is provided."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add the BookingLookup component to the landing page layout, positioned prominently (e.g., below the hero section or in a dedicated 'Track Your Booking' section). Ensure it is visible to all visitors without requiring authentication."
+        }
+      ]
+    }
+  ]
+}

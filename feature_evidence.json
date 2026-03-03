@@ -1,0 +1,130 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-a-stops-feature-to-the-booking-form-that-allows-customers-to-input-one-or-more-intermediate-stop-locations-along-the-route-include-an-add-stop-button-that-dynamically-appends-additional-location-input-fields-and-a-remove-button-for-each-stop-store-stop-data-as-part-of-the-booking-record-in-the-backend",
+      "featureTitle": "Add a 'Stops' feature to the booking form that allows customers to input one or more intermediate stop locations along the route. Include an 'Add Stop' button that dynamically appends additional location input fields, and a remove button for each stop. Store stop data as part of the booking record in the backend.",
+      "files": [
+        "frontend/src/components/BookingForm.tsx",
+        "frontend/src/components/NotificationsAdminView.tsx",
+        "frontend/src/hooks/useCreateBooking.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-customizable-price-field-to-the-booking-form-or-admin-panel-that-allows-setting-or-overriding-the-fare-for-a-route-the-price-should-be-configurable-per-booking-or-per-car-category-and-displayed-to-the-customer-during-booking",
+      "featureTitle": "Add a customizable price field to the booking form or admin panel that allows setting or overriding the fare for a route. The price should be configurable per booking or per car category, and displayed to the customer during booking.",
+      "files": [
+        "frontend/src/components/BookingForm.tsx",
+        "frontend/src/components/NotificationsAdminView.tsx",
+        "frontend/src/hooks/useCreateBooking.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-remove-the-luxury-car-category-from-the-booking-form-s-car-type-category-selection-only-sedan-and-suv-and-any-other-non-luxury-categories-should-remain-as-options",
+      "featureTitle": "Remove the 'Luxury' car category from the booking form's car type/category selection. Only Sedan and SUV (and any other non-luxury) categories should remain as options.",
+      "files": [
+        "frontend/src/components/BookingForm.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-the-same-pickup-drop-location-options-and-route-setup-used-for-nashik-to-the-pune-location-the-pune-pickup-and-drop-location-dropdowns-should-have-the-same-popular-points-search-functionality-and-preset-quick-link-options-as-nashik",
+      "featureTitle": "Apply the same pickup/drop location options and route setup used for Nashik to the Pune location. The Pune pickup and drop location dropdowns should have the same popular points, search functionality, and preset quick-link options as Nashik.",
+      "files": [
+        "frontend/src/components/BookingForm.tsx",
+        "frontend/src/components/QuickLinksSection.tsx",
+        "frontend/src/components/RouteInfoSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-number-of-seats-and-luggage-fields-to-the-customer-passenger-details-section-of-the-booking-form-these-should-allow-the-customer-to-specify-how-many-seats-they-need-and-how-much-luggage-they-are-carrying-store-these-values-in-the-booking-record",
+      "featureTitle": "Add 'Number of Seats' and 'Luggage' fields to the customer/passenger details section of the booking form. These should allow the customer to specify how many seats they need and how much luggage they are carrying. Store these values in the booking record.",
+      "files": [
+        "frontend/src/components/BookingForm.tsx",
+        "frontend/src/components/NotificationsAdminView.tsx",
+        "frontend/src/hooks/useCreateBooking.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-clearly-visible-booking-info-or-my-booking-section-accessible-from-the-landing-page-where-customers-can-look-up-their-booking-details-by-entering-their-booking-reference-id-or-phone-number-display-the-booking-summary-including-route-stops-car-type-date-time-passenger-details-luggage-seats-and-price",
+      "featureTitle": "Add a clearly visible 'Booking Info' or 'My Booking' section accessible from the landing page where customers can look up their booking details by entering their booking reference ID or phone number. Display the booking summary including route, stops, car type, date/time, passenger details, luggage, seats, and price.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/BookingLookup.tsx",
+        "frontend/src/hooks/useFindBookingByPhone.ts",
+        "frontend/src/hooks/useGetBookingById.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

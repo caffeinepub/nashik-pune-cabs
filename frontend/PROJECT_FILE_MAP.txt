@@ -1,0 +1,473 @@
+================================================================================
+PROJECT FILE MAP - Nashik to Pune Cab Booking Service
+================================================================================
+Last Updated: February 17, 2026
+
+This document provides a comprehensive overview of the project structure,
+file purposes, routing architecture, and frontend-backend integration points.
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+1. Project Overview
+2. Backend Structure
+3. Frontend Structure
+4. Routing & Navigation
+5. Frontend-Backend Integration
+6. Component Relationships
+7. Data Flow
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+This is a cab booking application for Nashik to Pune taxi service built on
+the Internet Computer platform. It features:
+- Public booking interface for customers
+- Admin dashboard for viewing all bookings
+- Internet Identity authentication
+- Role-based access control (admin/user/guest)
+
+Technology Stack:
+- Backend: Motoko (Internet Computer)
+- Frontend: React + TypeScript + Tailwind CSS
+- State Management: React Query (@tanstack/react-query)
+- Authentication: Internet Identity
+
+================================================================================
+2. BACKEND STRUCTURE
+================================================================================
+
+backend/main.mo
+├── Purpose: Main backend canister containing all business logic
+├── Key Features:
+│   ├── Booking management (create, retrieve)
+│   ├── User profile management
+│   ├── Admin initialization and access control
+│   └── Authorization checks
+├── Data Structures:
+│   ├── Booking: { name, phone, timestamp }
+│   ├── UserProfile: { name, phone }
+│   └── UserRole: admin | user | guest
+└── State:
+    ├── bookings: Map<Text, Booking>
+    ├── userProfiles: Map<Principal, UserProfile>
+    ├── accessControlState: Access control system
+    └── adminInitialized: Bool
+
+backend/migration.mo
+└── Purpose: Handles state upgrades during canister updates (if needed)
+
+================================================================================
+3. FRONTEND STRUCTURE
+================================================================================
+
+ROOT FILES
+----------
+frontend/index.html
+└── HTML entry point with SEO meta tags for Nashik-Pune taxi service
+
+frontend/tailwind.config.js
+└── Tailwind configuration with custom saffron/charcoal color palette
+
+frontend/src/index.css
+└── Global styles with OKLCH color system for light/dark modes
+
+frontend/src/config.ts [AUTO-GENERATED]
+└── Application configuration (do not modify)
+
+frontend/src/main.tsx [AUTO-GENERATED]
+└── React application entry point (do not modify)
+
+CORE APPLICATION
+----------------
+frontend/src/App.tsx
+├── Purpose: Main application component with hash-based routing
+├── Routes:
+│   ├── "/" or "#/" → Public landing page with booking form
+│   └── "#/admin" → Admin bookings dashboard
+└── Features: Simple hash routing, no external router library
+
+HOOKS
+-----
+frontend/src/hooks/useActor.ts [AUTO-GENERATED]
+└── Initializes backend actor for canister communication (do not modify)
+
+frontend/src/hooks/useInternetIdentity.ts [AUTO-GENERATED]
+└── Internet Identity authentication provider (do not modify)
+
+frontend/src/hooks/useQueries.ts
+├── Purpose: React Query hooks for backend data fetching
+└── Exports:
+    └── useGetAllData() - Generic query example (not used in current app)
+
+frontend/src/hooks/useCreateBooking.ts
+├── Purpose: Mutation hook for creating new bookings
+├── Backend Method: createBooking(name, phone)
+└── Features: Extracts booking ID, invalidates cache
+
+frontend/src/hooks/useBookingsWithIds.ts
+├── Purpose: Query hook for fetching all bookings (admin only)
+├── Backend Method: getAllBookingsWithIdsSorted()
+└── Features: Hardened retry logic, authorization error handling
+
+frontend/src/hooks/useIsCallerAdmin.ts
+├── Purpose: Query hook to check if current user is admin
+├── Backend Method: isCallerAdmin()
+└── Features: Graceful error handling for authorization failures
+
+frontend/src/hooks/useHasAdmin.ts
+├── Purpose: Query hook to check if system has an admin configured
+└── Backend Method: hasAdmin()
+
+frontend/src/hooks/useCurrentPrincipalText.ts
+├── Purpose: Query hook to get current user's principal ID as text
+└── Backend Method: getCurrentPrincipalText()
+
+frontend/src/hooks/useInitializeAdmin.ts
+├── Purpose: Mutation hook to claim admin access (first-time setup)
+├── Backend Method: initializeAdmin()
+└── Features: Invalidates related queries on success
+
+PAGES
+-----
+frontend/src/pages/ [NOT USED]
+└── Note: App uses simple hash routing in App.tsx, no separate page files
+
+COMPONENTS - PUBLIC INTERFACE
+------------------------------
+frontend/src/components/BookingForm.tsx
+├── Purpose: Main booking form for customers
+├── Fields: pickup, drop, date, time, trip type, car type, name, phone
+├── Validation: Client-side validation for all required fields
+├── Backend Integration: Uses useCreateBooking hook
+└── Car Types: Limited to Sedan and SUV only
+
+frontend/src/components/BookingConfirmation.tsx
+├── Purpose: Success screen after booking submission
+└── Displays: Booking reference ID, trip summary, next steps
+
+frontend/src/components/VehiclePricingSection.tsx
+├── Purpose: Displays vehicle options (Sedan, SUV)
+└── Asset: Uses vehicle-set-no-tempo.dim_1200x400.png
+
+frontend/src/components/HighlightsSection.tsx
+└── Purpose: Service highlights grid (6 key benefits)
+
+frontend/src/components/RouteInfoSection.tsx
+└── Purpose: Route information with distance/duration stats
+
+frontend/src/components/FaqSection.tsx
+└── Purpose: Accordion-based FAQ section (8 questions)
+
+frontend/src/components/TrustStrip.tsx
+└── Purpose: Trust indicators strip (4 trust signals)
+
+frontend/src/components/FooterContact.tsx
+├── Purpose: Comprehensive footer with contact info and links
+└── Attribution: Includes caffeine.ai link with UTM tracking
+
+COMPONENTS - ADMIN INTERFACE
+-----------------------------
+frontend/src/components/AdminBookingsPage.tsx
+├── Purpose: Admin-only dashboard for viewing all bookings
+├── Authentication States:
+│   ├── 1. Loading (checking authentication)
+│   ├── 2. Not logged in (shows login prompt)
+│   ├── 3. Claim admin access (first-time admin setup)
+│   ├── 4. Access denied (logged in but not admin)
+│   └── 5. Authorized (shows bookings list)
+├── Backend Integration:
+│   ├── useInternetIdentity (authentication)
+│   ├── useHasAdmin (check if admin exists)
+│   ├── useIsCallerAdmin (check if current user is admin)
+│   ├── useCurrentPrincipalText (display principal ID)
+│   └── useInitializeAdmin (claim admin access)
+└── Child Components: NotificationsAdminView
+
+frontend/src/components/NotificationsAdminView.tsx
+├── Purpose: Displays bookings list in table format
+├── Backend Integration: Uses useBookingsWithIds hook
+├── Features: Enhanced authorization error handling
+└── Displays: Name, phone, timestamp, booking ID for each booking
+
+UI COMPONENTS [READ-ONLY]
+--------------------------
+frontend/src/components/ui/
+├── Purpose: Shadcn/ui component library (DO NOT MODIFY)
+├── Components: Button, Card, Table, Dialog, Sheet, and 40+ more
+└── Usage: Import and use via props/className customization only
+
+================================================================================
+4. ROUTING & NAVIGATION
+================================================================================
+
+ROUTING ARCHITECTURE
+--------------------
+Type: Simple hash-based routing (no external router library)
+Implementation: frontend/src/App.tsx
+
+Routes:
+┌─────────────────┬──────────────────────────────────────────────────────┐
+│ URL Pattern     │ Component/View                                       │
+├─────────────────┼──────────────────────────────────────────────────────┤
+│ /               │ Public landing page with booking form                │
+│ #/              │ Public landing page with booking form                │
+│ #/admin         │ Admin bookings dashboard (requires authentication)   │
+└─────────────────┴──────────────────────────────────────────────────────┘
+
+Navigation Implementation:
+- Uses window.location.hash to determine current route
+- Updates via window.location.hash = '#/admin' or '#/'
+- No <Link> components needed, uses standard <a href="#/admin">
+
+Access Control:
+- Public routes: Accessible to all users (guest, user, admin)
+- Admin routes: Require authentication + admin role verification
+
+================================================================================
+5. FRONTEND-BACKEND INTEGRATION
+================================================================================
+
+BACKEND CANISTER METHODS
+-------------------------
+All methods are called through the actor initialized in useActor.ts
+
+PUBLIC METHODS (accessible to all users including guests)
+----------------------------------------------------------
+createBooking(name: string, phone: string): Promise<string>
+├── Purpose: Create a new booking
+├── Parameters:
+│   ├── name: Customer name (2-30 chars)
+│   └── phone: Phone number (10-15 chars, digits/+ only)
+├── Returns: String with format "{bookingId} {name} {phone}"
+├── Frontend Hook: useCreateBooking (hooks/useCreateBooking.ts)
+└── Used By: BookingForm component
+
+QUERY METHODS (read-only, require authentication)
+--------------------------------------------------
+getAllBookingsWithIdsSorted(): Promise<Array<[string, Booking]>>
+├── Purpose: Fetch all bookings sorted by timestamp (newest first)
+├── Authorization: Admin only
+├── Returns: Array of [bookingId, Booking] tuples
+├── Frontend Hook: useBookingsWithIds (hooks/useBookingsWithIds.ts)
+└── Used By: NotificationsAdminView component
+
+isCallerAdmin(): Promise<boolean>
+├── Purpose: Check if current authenticated user is admin
+├── Returns: true if admin, false otherwise
+├── Frontend Hook: useIsCallerAdmin (hooks/useIsCallerAdmin.ts)
+└── Used By: AdminBookingsPage component
+
+hasAdmin(): Promise<boolean>
+├── Purpose: Check if system has an admin configured
+├── Returns: true if admin exists, false if not initialized
+├── Frontend Hook: useHasAdmin (hooks/useHasAdmin.ts)
+└── Used By: AdminBookingsPage component
+
+getCurrentPrincipalText(): Promise<string>
+├── Purpose: Get current user's principal ID as text for display
+├── Returns: Principal ID string
+├── Frontend Hook: useCurrentPrincipalText (hooks/useCurrentPrincipalText.ts)
+└── Used By: AdminBookingsPage component (claim admin flow)
+
+getCallerUserProfile(): Promise<UserProfile | null>
+├── Purpose: Get current user's profile
+├── Authorization: User role required
+├── Returns: UserProfile or null if not set
+├── Frontend Hook: Not currently implemented in custom hooks
+└── Used By: Not currently used in UI
+
+getUserProfile(user: Principal): Promise<UserProfile | null>
+├── Purpose: Get any user's profile (admin or own profile only)
+├── Authorization: Admin or self only
+├── Returns: UserProfile or null
+├── Frontend Hook: Not currently implemented
+└── Used By: Not currently used in UI
+
+getCallerUserRole(): Promise<UserRole>
+├── Purpose: Get current user's role (admin/user/guest)
+├── Returns: UserRole enum value
+├── Frontend Hook: Not currently implemented
+└── Used By: Not currently used in UI
+
+UPDATE METHODS (state-changing, require authentication)
+--------------------------------------------------------
+initializeAdmin(): Promise<void>
+├── Purpose: Claim admin access (first user only)
+├── Authorization: Only works if no admin exists, caller not anonymous
+├── Frontend Hook: useInitializeAdmin (hooks/useInitializeAdmin.ts)
+└── Used By: AdminBookingsPage component (claim admin button)
+
+saveCallerUserProfile(profile: UserProfile): Promise<void>
+├── Purpose: Save current user's profile
+├── Authorization: User role required
+├── Parameters: { name: string, phone: string }
+├── Frontend Hook: Not currently implemented
+└── Used By: Not currently used in UI
+
+assignCallerUserRole(user: Principal, role: UserRole): Promise<void>
+├── Purpose: Assign role to a user (admin only)
+├── Authorization: Admin only
+├── Frontend Hook: Not currently implemented
+└── Used By: Not currently used in UI
+
+ERROR HANDLING
+--------------
+Backend errors are thrown via Runtime.trap() with descriptive messages:
+- "Unauthorized: Only admins can view all bookings"
+- "Unauthorized: Admin already initialized"
+- "Unauthorized: Anonymous principals cannot be admin"
+- "Name too short" / "Name too long"
+- "Phone number too short" / "Phone number too long"
+- "Phone number contains invalid characters"
+
+Frontend handles these via React Query error states and displays
+appropriate error messages to users.
+
+================================================================================
+6. COMPONENT RELATIONSHIPS
+================================================================================
+
+App.tsx (Root)
+├── Hash Router Logic
+├── Public Landing View
+│   ├── Header (inline)
+│   ├── Hero Section (inline with cab-hero image)
+│   ├── BookingForm
+│   │   └── On Success → BookingConfirmation
+│   ├── VehiclePricingSection
+│   ├── HighlightsSection
+│   ├── RouteInfoSection
+│   ├── TrustStrip
+│   ├── FaqSection
+│   └── FooterContact
+└── Admin View (#/admin route)
+    └── AdminBookingsPage
+        ├── Login Prompt (if not authenticated)
+        ├── Claim Admin Access (if no admin exists)
+        ├── Access Denied (if not admin)
+        └── NotificationsAdminView (if authorized)
+            └── Bookings Table
+
+COMPONENT DEPENDENCIES
+----------------------
+BookingForm
+├── Hooks: useCreateBooking, useState
+├── Backend: createBooking()
+└── Navigation: Shows BookingConfirmation on success
+
+BookingConfirmation
+├── Props: bookingId, formData
+└── No backend calls
+
+AdminBookingsPage
+├── Hooks: useInternetIdentity, useHasAdmin, useIsCallerAdmin,
+│          useCurrentPrincipalText, useInitializeAdmin
+├── Backend: hasAdmin(), isCallerAdmin(), getCurrentPrincipalText(),
+│           initializeAdmin()
+└── Child: NotificationsAdminView
+
+NotificationsAdminView
+├── Hooks: useBookingsWithIds
+├── Backend: getAllBookingsWithIdsSorted()
+└── Displays: Table of all bookings
+
+================================================================================
+7. DATA FLOW
+================================================================================
+
+BOOKING CREATION FLOW
+----------------------
+1. User fills BookingForm on landing page
+2. Client-side validation checks all fields
+3. Form submits → useCreateBooking mutation
+4. Hook calls actor.createBooking(name, phone)
+5. Backend validates, generates ID, stores booking
+6. Backend returns: "{bookingId} {name} {phone}"
+7. Hook extracts bookingId from response
+8. Hook invalidates 'bookings-with-ids' query cache
+9. BookingConfirmation component displays success with ID
+
+ADMIN ACCESS FLOW
+-----------------
+1. User navigates to #/admin
+2. AdminBookingsPage checks authentication via useInternetIdentity
+3. If not logged in → Show login prompt
+4. User clicks login → Internet Identity flow
+5. After login, check hasAdmin() via useHasAdmin hook
+6. If no admin exists → Show "Claim Admin Access" with principal ID
+7. User clicks "Claim Admin Access" → useInitializeAdmin mutation
+8. Backend sets caller as admin (if first time)
+9. Check isCallerAdmin() via useIsCallerAdmin hook
+10. If admin → Show NotificationsAdminView
+11. If not admin → Show "Access Denied"
+
+BOOKINGS DISPLAY FLOW (Admin)
+------------------------------
+1. NotificationsAdminView mounts
+2. useBookingsWithIds hook activates
+3. Hook calls actor.getAllBookingsWithIdsSorted()
+4. Backend checks if caller is admin (throws if not)
+5. Backend returns array of [id, booking] tuples sorted newest-first
+6. React Query caches result with key 'bookings-with-ids'
+7. Component renders table with booking data
+8. User clicks refresh → Query refetches from backend
+9. Cache invalidation happens on new booking creation
+
+AUTHENTICATION STATE FLOW
+--------------------------
+1. useInternetIdentity hook initializes on app load
+2. Checks for stored identity in IndexedDB
+3. If found → Restores session (identity available)
+4. If not found → User is anonymous (identity = null)
+5. Login → Opens Internet Identity window
+6. User authenticates → Identity stored
+7. Logout (clear()) → Clears identity and cache
+8. All queries using actor are disabled when identity is null
+
+================================================================================
+NOTES
+================================================================================
+
+ADMIN INITIALIZATION
+--------------------
+- First authenticated user can claim admin access
+- Only one admin can be initialized (adminInitialized flag)
+- Anonymous principals cannot become admin
+- Admin status persists across canister upgrades
+
+AUTHORIZATION PATTERN
+---------------------
+- Backend enforces all authorization via Runtime.trap()
+- Frontend checks are for UX only (show/hide UI elements)
+- Never rely on frontend checks for security
+- Always handle authorization errors gracefully in UI
+
+CACHING STRATEGY
+----------------
+- React Query caches all backend responses
+- Query keys: 'bookings-with-ids', 'isCallerAdmin', 'hasAdmin', etc.
+- Mutations invalidate related queries automatically
+- Cache cleared on logout via queryClient.clear()
+
+ASSET MANAGEMENT
+----------------
+Static assets in /assets/:
+- cab-hero.dim_1600x700.png (hero section)
+- vehicle-set-no-tempo.dim_1200x400.png (pricing section)
+- vehicle-set.dim_1200x400.png (unused, includes tempo)
+
+Usage: <img src="/assets/filename.png" />
+
+AUTO-GENERATED FILES
+--------------------
+Do not modify these files (auto-generated by the build system):
+- frontend/src/main.tsx
+- frontend/src/config.ts
+- frontend/src/hooks/useActor.ts
+- frontend/src/hooks/useInternetIdentity.ts
+- frontend/src/components/ui/* (all shadcn/ui components)
+
+================================================================================
+END OF FILE MAP
+================================================================================

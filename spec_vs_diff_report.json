@@ -1,0 +1,69 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-03-02T06:12:38.550Z",
+  "summary": "All six requirements are substantially implemented in the diff. REQ-1 through REQ-6 are addressed in both frontend and backend. Minor gaps exist: REQ-3 still retains luxury in backend variant type and some label maps; REQ-4's Pune pickup dropdown uses Nashik locations for pickup rather than Pune locations; REQ-6 retrieval shows booking details but the date/time fields stored at booking time may not map correctly since the Booking record has no explicit date/time fields (only timestamp). A few acceptance criteria are partially or ambiguously met.",
+  "missing_requirements": [
+    {
+      "id": "REQ-3",
+      "requirement": "Remove the 'Luxury' car category from backend variant types. Luxury must be fully removed from both UI and backend variant types if applicable.",
+      "reason": "The backend/main.mo still includes #luxury in the CarCategory variant type. The migration.mo also retains #luxury. The constraint explicitly states 'Luxury category must be fully removed from both UI and backend variant types if applicable'.",
+      "evidence": [
+        "backend/main.mo",
+        "backend/migration.mo"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Pune pickup dropdown has the same searchable location list as Nashik; Pune drop dropdown mirrors the Nashik drop location options.",
+      "reason": "In BookingForm.tsx, ALL_PICKUP_LOCATIONS is set to NASHIK_LOCATIONS only. Pune locations are only in the drop list. There is no mechanism for customers booking from Pune as pickup to get the PUNE_LOCATIONS list in a pickup dropdown. The QuickLinksSection 'Pune to Nashik' link still sets pickup to 'Nashik CBS' rather than a Pune location, suggesting Pune-as-pickup is not properly wired.",
+      "evidence": [
+        "frontend/src/components/BookingForm.tsx",
+        "frontend/src/components/QuickLinksSection.tsx"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Retrieved booking displays: route, stops, date, time, car type, passenger name, phone, luggage, seat count, and price.",
+      "reason": "The Booking record stored in the backend does not include pickup, drop, date, or time fields, only timestamp. The BookingLookup component therefore cannot display the route or the journey date/time as distinct fields, only the booking creation timestamp.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/components/BookingLookup.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "A migration module was added to handle schema migration from old to new booking format.",
+      "reason": "The build request did not request a migration module or any backward-compatibility migration logic. This is additional infrastructure not requested.",
+      "evidence": [
+        "backend/migration.mo"
+      ]
+    },
+    {
+      "description": "The 'Pune to Nashik' quick link sets pickup to 'Nashik CBS' instead of a Pune location, which is a logical inconsistency introduced in the implementation.",
+      "reason": "QuickLinksSection sets pickup to 'Nashik CBS' for the 'Pune to Nashik' route, which contradicts the intent of a Pune-originating route and was not requested behavior.",
+      "evidence": [
+        "frontend/src/components/QuickLinksSection.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.82,
+  "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/App.tsx",
+    "frontend/src/components/BookingConfirmation.tsx",
+    "frontend/src/components/BookingForm.tsx",
+    "frontend/src/components/BookingLookup.tsx",
+    "frontend/src/components/NotificationsAdminView.tsx",
+    "frontend/src/components/QuickLinksSection.tsx",
+    "frontend/src/components/RouteInfoSection.tsx",
+    "frontend/src/hooks/useCreateBooking.ts",
+    "frontend/src/hooks/useFindBookingByPhone.ts",
+    "frontend/src/hooks/useGetBookingById.ts",
+    "frontend/src/plain/booking.ts",
+    "project_state.json"
+  ]
+}

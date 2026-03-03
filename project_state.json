@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "A cab/taxi booking application with location selection (Nashik, Pune), car type selection, passenger details, stops feature, customizable pricing, and booking info management.",
+  "architectural_notes": [
+    "App is a cab/taxi booking platform with Nashik and Pune location support, car type selection, and passenger details.",
+    "Booking info visibility and luggage/seat fields in customer details need to be addressed."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-add-a-stops-feature-to-the-booking-form-that-allows-customers-to-input-one-or-more-intermediate-stop-locations-along-the-route-include-an-add-stop-button-that-dynamically-appends-additional-location-input-fields-and-a-remove-button-for-each-stop-store-stop-data-as-part-of-the-booking-record-in-the-backend",
+      "title": "Add a 'Stops' feature to the booking form that allows customers to input one or more intermediate stop locations along the route. Include an 'Add Stop' button that dynamically appends additional location input fields, and a remove button for each stop. Store stop data as part of the booking record in the backend.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-customizable-price-field-to-the-booking-form-or-admin-panel-that-allows-setting-or-overriding-the-fare-for-a-route-the-price-should-be-configurable-per-booking-or-per-car-category-and-displayed-to-the-customer-during-booking",
+      "title": "Add a customizable price field to the booking form or admin panel that allows setting or overriding the fare for a route. The price should be configurable per booking or per car category, and displayed to the customer during booking.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-luxury-car-category-from-the-booking-form-s-car-type-category-selection-only-sedan-and-suv-and-any-other-non-luxury-categories-should-remain-as-options",
+      "title": "Remove the 'Luxury' car category from the booking form's car type/category selection. Only Sedan and SUV (and any other non-luxury) categories should remain as options.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-the-same-pickup-drop-location-options-and-route-setup-used-for-nashik-to-the-pune-location-the-pune-pickup-and-drop-location-dropdowns-should-have-the-same-popular-points-search-functionality-and-preset-quick-link-options-as-nashik",
+      "title": "Apply the same pickup/drop location options and route setup used for Nashik to the Pune location. The Pune pickup and drop location dropdowns should have the same popular points, search functionality, and preset quick-link options as Nashik.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-number-of-seats-and-luggage-fields-to-the-customer-passenger-details-section-of-the-booking-form-these-should-allow-the-customer-to-specify-how-many-seats-they-need-and-how-much-luggage-they-are-carrying-store-these-values-in-the-booking-record",
+      "title": "Add 'Number of Seats' and 'Luggage' fields to the customer/passenger details section of the booking form. These should allow the customer to specify how many seats they need and how much luggage they are carrying. Store these values in the booking record.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-clearly-visible-booking-info-or-my-booking-section-accessible-from-the-landing-page-where-customers-can-look-up-their-booking-details-by-entering-their-booking-reference-id-or-phone-number-display-the-booking-summary-including-route-stops-car-type-date-time-passenger-details-luggage-seats-and-price",
+      "title": "Add a clearly visible 'Booking Info' or 'My Booking' section accessible from the landing page where customers can look up their booking details by entering their booking reference ID or phone number. Display the booking summary including route, stops, car type, date/time, passenger details, luggage, seats, and price.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Add stops feature allowing customers to input multiple stop locations along the route",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add customize price functionality for routes/bookings",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Remove luxury category from car type selection",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Apply same location setup as Nashik to Pune location",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add luggage and number of seats fields to customer details section",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Provide/clarify where booking info can be viewed (booking info display/dashboard)",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Nashik Pune Cabs",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
