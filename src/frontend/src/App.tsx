@@ -1,16 +1,20 @@
-import { useState } from 'react';
-import BookingForm from './components/BookingForm';
-import VehiclePricingSection from './components/VehiclePricingSection';
-import HighlightsSection from './components/HighlightsSection';
-import RouteInfoSection from './components/RouteInfoSection';
-import FaqSection from './components/FaqSection';
-import FooterContact from './components/FooterContact';
-import TrustStrip from './components/TrustStrip';
-import BookingConfirmation from './components/BookingConfirmation';
-import NotificationsAdminView from './components/NotificationsAdminView';
-import { Phone, Bell } from 'lucide-react';
-import { Button } from './components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './components/ui/sheet';
+import { Phone } from "lucide-react";
+import { useRef, useState } from "react";
+import type { CarCategory, CarModel } from "./backend";
+import AdminBookingsPage from "./components/AdminBookingsPage";
+import BookingConfirmation from "./components/BookingConfirmation";
+import BookingForm from "./components/BookingForm";
+import BookingLookup from "./components/BookingLookup";
+import FaqSection from "./components/FaqSection";
+import FooterContact from "./components/FooterContact";
+import HighlightsSection from "./components/HighlightsSection";
+import QuickLinksSection, {
+  type QuickLinkData,
+} from "./components/QuickLinksSection";
+import RouteInfoSection from "./components/RouteInfoSection";
+import TrustStrip from "./components/TrustStrip";
+import VehiclePricingSection from "./components/VehiclePricingSection";
+import { Button } from "./components/ui/button";
 
 export interface BookingData {
   name: string;
@@ -19,8 +23,14 @@ export interface BookingData {
   drop: string;
   date: string;
   time: string;
-  tripType: 'one-way' | 'round-trip';
+  tripType: "one-way" | "round-trip";
   carType: string;
+  carCategory?: CarCategory;
+  carModel?: CarModel;
+  price?: number;
+  stops?: string[];
+  luggage?: { count: number; details: string };
+  seats?: number;
 }
 
 function App() {
@@ -29,16 +39,56 @@ function App() {
     bookingData: BookingData;
   } | null>(null);
 
-  const handleBookingSuccess = (referenceId: string, bookingData: BookingData) => {
+  const [quickLinkPrefill, setQuickLinkPrefill] = useState<
+    Partial<BookingData> | undefined
+  >(undefined);
+
+  const bookingSectionRef = useRef<HTMLElement>(null);
+
+  // Simple hash-based routing for admin page
+  const [currentView, setCurrentView] = useState<"landing" | "admin">(() => {
+    return window.location.hash === "#admin" ? "admin" : "landing";
+  });
+
+  // Listen for hash changes
+  useState(() => {
+    const handleHashChange = () => {
+      setCurrentView(window.location.hash === "#admin" ? "admin" : "landing");
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  });
+
+  const handleBookingSuccess = (
+    referenceId: string,
+    bookingData: BookingData,
+  ) => {
     setConfirmedBooking({ referenceId, bookingData });
-    // Scroll to top to show confirmation
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleNewBooking = () => {
     setConfirmedBooking(null);
+    setQuickLinkPrefill(undefined);
   };
 
+  const handleQuickLink = (data: QuickLinkData) => {
+    setConfirmedBooking(null);
+    setQuickLinkPrefill(data);
+    setTimeout(() => {
+      bookingSectionRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
+  };
+
+  // Render admin page
+  if (currentView === "admin") {
+    return <AdminBookingsPage />;
+  }
+
+  // Render landing page
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -55,6 +105,7 @@ function App() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="h-6 w-6"
+                aria-hidden="true"
               >
                 <path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2" />
                 <path d="M17 17h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" />
@@ -64,27 +115,29 @@ function App() {
               </svg>
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground">Nashik Pune Cabs</h1>
-              <p className="text-xs text-muted-foreground">Reliable & Comfortable</p>
+              <h1 className="text-lg font-bold text-foreground">
+                Nashik Pune Cabs
+              </h1>
+              <p className="text-xs text-muted-foreground">
+                Reliable & Comfortable
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Bell className="mr-2 h-4 w-4" />
-                  Bookings
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-full sm:max-w-2xl">
-                <SheetHeader>
-                  <SheetTitle>Booking Notifications</SheetTitle>
-                </SheetHeader>
-                <NotificationsAdminView />
-              </SheetContent>
-            </Sheet>
-            <Button asChild size="sm" className="bg-saffron text-charcoal hover:bg-saffron/90">
-              <a href="tel:+919876543210">
+            <Button
+              asChild
+              size="sm"
+              variant="outline"
+              className="hidden sm:flex"
+            >
+              <a href="#track-booking">Track Booking</a>
+            </Button>
+            <Button
+              asChild
+              size="sm"
+              className="bg-saffron text-charcoal hover:bg-saffron/90"
+            >
+              <a href="tel:+919158818546">
                 <Phone className="mr-2 h-4 w-4" />
                 Call Now
               </a>
@@ -94,7 +147,7 @@ function App() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-charcoal via-charcoal-light to-charcoal">
+      <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-amber-500 to-yellow-400">
         <div className="absolute inset-0 bg-[url('/assets/generated/cab-hero.dim_1600x700.png')] bg-cover bg-center opacity-20" />
         <div className="container relative py-16 md:py-24">
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
@@ -105,17 +158,28 @@ function App() {
                   <span className="block text-saffron">Taxi Service</span>
                 </h2>
                 <p className="text-lg text-gray-200 md:text-xl">
-                  Experience comfortable and reliable cab service from Nashik to Pune. Professional drivers, transparent pricing, and door-to-door convenience.
+                  Experience comfortable and reliable cab service from Nashik to
+                  Pune. Professional drivers, transparent pricing, and
+                  door-to-door convenience.
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
-                <Button asChild size="lg" className="bg-saffron text-charcoal hover:bg-saffron/90">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-saffron text-charcoal hover:bg-saffron/90"
+                >
                   <a href="#booking">Book Now</a>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  <a href="tel:+919876543210">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-white text-white hover:bg-white/10"
+                >
+                  <a href="tel:+919158818546">
                     <Phone className="mr-2 h-5 w-5" />
-                    +91 98765 43210
+                    +91 91588 18546
                   </a>
                 </Button>
               </div>
@@ -134,8 +198,11 @@ function App() {
       {/* Trust Strip */}
       <TrustStrip />
 
+      {/* Quick Links */}
+      <QuickLinksSection onQuickLink={handleQuickLink} />
+
       {/* Booking Confirmation or Form */}
-      <section id="booking" className="py-12 md:py-16">
+      <section id="booking" ref={bookingSectionRef} className="py-12 md:py-16">
         <div className="container">
           {confirmedBooking ? (
             <BookingConfirmation
@@ -144,22 +211,36 @@ function App() {
               onNewBooking={handleNewBooking}
             />
           ) : (
-            <BookingForm onBookingSuccess={handleBookingSuccess} />
+            <BookingForm
+              onBookingSuccess={handleBookingSuccess}
+              prefillData={quickLinkPrefill}
+            />
           )}
         </div>
+      </section>
+
+      {/* Vehicle Pricing */}
+      <section id="pricing">
+        <VehiclePricingSection />
       </section>
 
       {/* Route Info */}
       <RouteInfoSection />
 
-      {/* Vehicle Pricing */}
-      <VehiclePricingSection />
+      {/* About Us / Highlights */}
+      <section id="about">
+        <HighlightsSection />
+      </section>
 
-      {/* Highlights */}
-      <HighlightsSection />
+      {/* Track Your Booking */}
+      <section id="track-booking">
+        <BookingLookup />
+      </section>
 
-      {/* FAQs */}
-      <FaqSection />
+      {/* FAQ */}
+      <section id="faq">
+        <FaqSection />
+      </section>
 
       {/* Footer */}
       <FooterContact />

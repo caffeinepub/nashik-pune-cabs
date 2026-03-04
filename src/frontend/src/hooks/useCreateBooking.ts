@@ -1,9 +1,16 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useActor } from './useActor';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { CarCategory, CarModel } from "../backend";
+import { useActor } from "./useActor";
 
-interface CreateBookingInput {
+export interface CreateBookingInput {
   name: string;
   phone: string;
+  carCategory: CarCategory;
+  carModel: CarModel;
+  price: number;
+  stops: string[];
+  luggage: { count: number; details: string };
+  seats: number;
 }
 
 export function useCreateBooking() {
@@ -13,20 +20,24 @@ export function useCreateBooking() {
   return useMutation({
     mutationFn: async (input: CreateBookingInput) => {
       if (!actor) {
-        throw new Error('Actor not initialized');
+        throw new Error("Actor not initialized");
       }
 
-      const result = await actor.createBooking(input.name, input.phone);
-      
-      // Extract booking ID from the result string
-      // Backend returns: "bookingId name phone"
-      const bookingId = result.split(' ')[0];
-      
-      return bookingId;
+      const result = await actor.createBooking(
+        input.name,
+        input.phone,
+        input.carCategory,
+        input.carModel,
+        BigInt(input.price),
+        input.stops,
+        { count: BigInt(input.luggage.count), details: input.luggage.details },
+        BigInt(input.seats),
+      );
+
+      return result;
     },
     onSuccess: () => {
-      // Invalidate bookings query to refetch the list
-      queryClient.invalidateQueries({ queryKey: ['bookings-with-ids'] });
+      queryClient.invalidateQueries({ queryKey: ["bookings-with-ids"] });
     },
   });
 }

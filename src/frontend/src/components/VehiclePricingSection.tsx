@@ -1,26 +1,32 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Users, Briefcase } from 'lucide-react';
+import { Briefcase, Users } from "lucide-react";
+import { Badge } from "./ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 
 export default function VehiclePricingSection() {
   const vehicles = [
     {
-      name: 'Sedan',
-      description: 'Perfect for small families and business trips',
-      capacity: '4 Passengers',
-      luggage: '2-3 Bags',
-      features: ['AC', 'Comfortable Seats', 'Professional Driver'],
-      price: '₹2,500 - ₹3,000',
+      name: "Sedan",
+      description: "Perfect for small families and business trips",
+      capacity: "4 Passengers",
+      luggage: "2-3 Bags",
+      features: ["AC", "Comfortable Seats", "Professional Driver"],
+      price: "₹2,500 - ₹3,000",
       icon: Users,
       popular: false,
     },
     {
-      name: 'SUV',
-      description: 'Spacious and comfortable for group travel',
-      capacity: '6-7 Passengers',
-      luggage: '4-5 Bags',
-      features: ['AC', 'Extra Legroom', 'Premium Comfort'],
-      price: '₹3,500 - ₹4,500',
+      name: "SUV",
+      description: "Spacious and comfortable for group travel",
+      capacity: "6-7 Passengers",
+      luggage: "4-5 Bags",
+      features: ["AC", "Extra Legroom", "Premium Comfort"],
+      price: "₹3,500 - ₹4,500",
       icon: Briefcase,
       popular: true,
     },
@@ -34,8 +40,27 @@ export default function VehiclePricingSection() {
             Choose Your <span className="text-saffron">Vehicle</span>
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Select from our fleet of well-maintained vehicles. All prices are approximate and may vary based on specific requirements.
+            Select from our fleet of well-maintained vehicles. All prices are
+            approximate and may vary based on specific requirements.
           </p>
+          <div className="mx-auto mt-3 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-sm font-medium text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-400">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-4 w-4 shrink-0"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            Prices are excluding toll fees
+          </div>
         </div>
 
         {/* Vehicle Set Image */}
@@ -51,7 +76,10 @@ export default function VehiclePricingSection() {
           {vehicles.map((vehicle) => {
             const Icon = vehicle.icon;
             return (
-              <Card key={vehicle.name} className={`relative overflow-hidden transition-all hover:shadow-lg ${vehicle.popular ? 'border-saffron border-2' : ''}`}>
+              <Card
+                key={vehicle.name}
+                className={`relative overflow-hidden transition-all hover:shadow-lg ${vehicle.popular ? "border-saffron border-2" : ""}`}
+              >
                 {vehicle.popular && (
                   <Badge className="absolute right-4 top-4 bg-saffron text-charcoal">
                     Most Popular
@@ -76,7 +104,9 @@ export default function VehiclePricingSection() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <p className="text-sm font-semibold text-muted-foreground">Features:</p>
+                    <p className="text-sm font-semibold text-muted-foreground">
+                      Features:
+                    </p>
                     <ul className="space-y-1">
                       {vehicle.features.map((feature) => (
                         <li key={feature} className="flex items-center text-sm">
@@ -88,6 +118,7 @@ export default function VehiclePricingSection() {
                             strokeWidth="2"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
+                            aria-hidden="true"
                           >
                             <path d="M5 13l4 4L19 7" />
                           </svg>
@@ -98,8 +129,12 @@ export default function VehiclePricingSection() {
                   </div>
                   <div className="border-t pt-4">
                     <div className="flex items-baseline justify-between">
-                      <span className="text-sm text-muted-foreground">Approx. Price:</span>
-                      <span className="text-2xl font-bold text-saffron">{vehicle.price}</span>
+                      <span className="text-sm text-muted-foreground">
+                        Approx. Price:
+                      </span>
+                      <span className="text-2xl font-bold text-saffron">
+                        {vehicle.price}
+                      </span>
                     </div>
                   </div>
                 </CardContent>

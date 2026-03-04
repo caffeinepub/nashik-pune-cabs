@@ -1,12 +1,13 @@
-import { Phone, Mail, MapPin, Clock } from 'lucide-react';
-import { SiFacebook, SiInstagram, SiX } from 'react-icons/si';
-import { Separator } from './ui/separator';
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { SiFacebook, SiInstagram, SiX } from "react-icons/si";
+import { Separator } from "./ui/separator";
 
 export default function FooterContact() {
   const currentYear = new Date().getFullYear();
-  const appIdentifier = typeof window !== 'undefined' 
-    ? encodeURIComponent(window.location.hostname)
-    : 'nashik-pune-cabs';
+  const appIdentifier =
+    typeof window !== "undefined"
+      ? encodeURIComponent(window.location.hostname)
+      : "nashik-pune-cabs";
 
   return (
     <footer className="border-t bg-charcoal text-white">
@@ -25,6 +26,7 @@ export default function FooterContact() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   className="h-6 w-6"
+                  aria-hidden="true"
                 >
                   <path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2" />
                   <path d="M17 17h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" />
@@ -38,25 +40,32 @@ export default function FooterContact() {
               </div>
             </div>
             <p className="text-sm text-gray-300">
-              Your trusted partner for comfortable and reliable cab service between Nashik and Pune.
+              Your trusted partner for comfortable and reliable cab service
+              between Nashik and Pune.
             </p>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-saffron hover:text-charcoal"
                 aria-label="Facebook"
               >
                 <SiFacebook className="h-4 w-4" />
               </a>
               <a
-                href="#"
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-saffron hover:text-charcoal"
                 aria-label="Instagram"
               >
                 <SiInstagram className="h-4 w-4" />
               </a>
               <a
-                href="#"
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-saffron hover:text-charcoal"
                 aria-label="X (Twitter)"
               >
@@ -70,12 +79,18 @@ export default function FooterContact() {
             <h4 className="text-lg font-semibold">Quick Links</h4>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <a href="#booking" className="transition-colors hover:text-saffron">
+                <a
+                  href="#booking"
+                  className="transition-colors hover:text-saffron"
+                >
                   Book a Cab
                 </a>
               </li>
               <li>
-                <a href="#pricing" className="transition-colors hover:text-saffron">
+                <a
+                  href="#pricing"
+                  className="transition-colors hover:text-saffron"
+                >
                   Pricing
                 </a>
               </li>
@@ -85,7 +100,10 @@ export default function FooterContact() {
                 </a>
               </li>
               <li>
-                <a href="#about" className="transition-colors hover:text-saffron">
+                <a
+                  href="#about"
+                  className="transition-colors hover:text-saffron"
+                >
                   About Us
                 </a>
               </li>
@@ -98,13 +116,19 @@ export default function FooterContact() {
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-saffron" />
-                <a href="tel:+919876543210" className="transition-colors hover:text-saffron">
-                  +91 98765 43210
+                <a
+                  href="tel:+919158818546"
+                  className="transition-colors hover:text-saffron"
+                >
+                  +91 91588 18546
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-saffron" />
-                <a href="mailto:info@nashikpunecabs.com" className="transition-colors hover:text-saffron">
+                <a
+                  href="mailto:info@nashikpunecabs.com"
+                  className="transition-colors hover:text-saffron"
+                >
                   info@nashikpunecabs.com
                 </a>
               </li>
@@ -126,13 +150,15 @@ export default function FooterContact() {
               </div>
             </div>
             <div className="rounded-lg bg-saffron/10 p-4">
-              <p className="mb-2 text-sm font-semibold text-saffron">Need Immediate Booking?</p>
+              <p className="mb-2 text-sm font-semibold text-saffron">
+                Need Immediate Booking?
+              </p>
               <a
-                href="tel:+919876543210"
+                href="tel:+919158818546"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-saffron"
               >
                 <Phone className="h-4 w-4" />
-                Call Now: +91 98765 43210
+                Call Now: +91 91588 18546
               </a>
             </div>
           </div>
@@ -143,7 +169,7 @@ export default function FooterContact() {
         <div className="flex flex-col items-center justify-between gap-4 text-center text-sm text-gray-400 md:flex-row md:text-left">
           <p>© {currentYear} Nashik Pune Cabs. All rights reserved.</p>
           <p>
-            Built with ❤️ using{' '}
+            Built with ❤️ using{" "}
             <a
               href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${appIdentifier}`}
               target="_blank"

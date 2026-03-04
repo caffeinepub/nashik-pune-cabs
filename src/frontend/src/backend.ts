@@ -89,46 +89,552 @@ export class ExternalBlob {
         return this;
     }
 }
+export type Time = bigint;
 export interface Booking {
+    carModel: CarModel;
+    carCategory: CarCategory;
     name: string;
+    seats: bigint;
+    stops: Array<string>;
     timestamp: Time;
     phone: string;
+    price: bigint;
+    luggage: {
+        count: bigint;
+        details: string;
+    };
 }
-export type Time = bigint;
+export interface UserProfile {
+    name: string;
+    phone: string;
+}
+export enum CarCategory {
+    suv = "suv",
+    sedan = "sedan",
+    luxury = "luxury",
+    hatchback = "hatchback"
+}
+export enum CarModel {
+    xl6 = "xl6",
+    hyundaiXcent = "hyundaiXcent",
+    alto = "alto",
+    bmw5Series = "bmw5Series",
+    marutiCiaz = "marutiCiaz",
+    innovaCrysta = "innovaCrysta",
+    swiftDzire = "swiftDzire",
+    kiaCarens = "kiaCarens",
+    ertiga = "ertiga",
+    audiA6 = "audiA6",
+    scorpio = "scorpio",
+    mercedesEClass = "mercedesEClass",
+    swift = "swift",
+    tavera = "tavera",
+    innova = "innova",
+    wagonR = "wagonR",
+    hondaAmaze = "hondaAmaze"
+}
+export enum UserRole {
+    admin = "admin",
+    user = "user",
+    guest = "guest"
+}
 export interface backendInterface {
-    createBooking(name: string, phone: string): Promise<string>;
+    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    createBooking(name: string, phone: string, carCategory: CarCategory, carModel: CarModel, price: bigint, stops: Array<string>, luggage: {
+        count: bigint;
+        details: string;
+    }, seats: bigint): Promise<string>;
+    createBookingWithStops(name: string, phone: string, carCategory: CarCategory, carModel: CarModel, price: bigint, stops: Array<string>, luggage: {
+        count: bigint;
+        details: string;
+    }, seats: bigint): Promise<string>;
+    findBookingByPhone(phone: string): Promise<[string, Booking] | null>;
     getAllBookingsWithIdsSorted(): Promise<Array<[string, Booking]>>;
+    getBookingById(bookingId: string): Promise<Booking | null>;
+    getCallerUserProfile(): Promise<UserProfile | null>;
+    getCallerUserRole(): Promise<UserRole>;
+    getCurrentPrincipalText(): Promise<string>;
+    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    hasAdmin(): Promise<boolean>;
+    initializeAdmin(): Promise<void>;
+    isCallerAdmin(): Promise<boolean>;
+    saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    submitStops(bookingId: string, stops: Array<string>): Promise<void>;
 }
+import type { Booking as _Booking, CarCategory as _CarCategory, CarModel as _CarModel, Time as _Time, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async createBooking(arg0: string, arg1: string): Promise<string> {
+    async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.createBooking(arg0, arg1);
+                const result = await this.actor._initializeAccessControlWithSecret(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.createBooking(arg0, arg1);
+            const result = await this.actor._initializeAccessControlWithSecret(arg0);
             return result;
+        }
+    }
+    async assignCallerUserRole(arg0: Principal, arg1: UserRole): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async createBooking(arg0: string, arg1: string, arg2: CarCategory, arg3: CarModel, arg4: bigint, arg5: Array<string>, arg6: {
+        count: bigint;
+        details: string;
+    }, arg7: bigint): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createBooking(arg0, arg1, to_candid_CarCategory_n3(this._uploadFile, this._downloadFile, arg2), to_candid_CarModel_n5(this._uploadFile, this._downloadFile, arg3), arg4, arg5, arg6, arg7);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createBooking(arg0, arg1, to_candid_CarCategory_n3(this._uploadFile, this._downloadFile, arg2), to_candid_CarModel_n5(this._uploadFile, this._downloadFile, arg3), arg4, arg5, arg6, arg7);
+            return result;
+        }
+    }
+    async createBookingWithStops(arg0: string, arg1: string, arg2: CarCategory, arg3: CarModel, arg4: bigint, arg5: Array<string>, arg6: {
+        count: bigint;
+        details: string;
+    }, arg7: bigint): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createBookingWithStops(arg0, arg1, to_candid_CarCategory_n3(this._uploadFile, this._downloadFile, arg2), to_candid_CarModel_n5(this._uploadFile, this._downloadFile, arg3), arg4, arg5, arg6, arg7);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createBookingWithStops(arg0, arg1, to_candid_CarCategory_n3(this._uploadFile, this._downloadFile, arg2), to_candid_CarModel_n5(this._uploadFile, this._downloadFile, arg3), arg4, arg5, arg6, arg7);
+            return result;
+        }
+    }
+    async findBookingByPhone(arg0: string): Promise<[string, Booking] | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.findBookingByPhone(arg0);
+                return from_candid_opt_n7(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.findBookingByPhone(arg0);
+            return from_candid_opt_n7(this._uploadFile, this._downloadFile, result);
         }
     }
     async getAllBookingsWithIdsSorted(): Promise<Array<[string, Booking]>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getAllBookingsWithIdsSorted();
-                return result;
+                return from_candid_vec_n15(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getAllBookingsWithIdsSorted();
+            return from_candid_vec_n15(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getBookingById(arg0: string): Promise<Booking | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getBookingById(arg0);
+                return from_candid_opt_n16(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getBookingById(arg0);
+            return from_candid_opt_n16(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserProfile(): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserProfile();
+                return from_candid_opt_n17(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserProfile();
+            return from_candid_opt_n17(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserRole(): Promise<UserRole> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserRole();
+                return from_candid_UserRole_n18(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserRole();
+            return from_candid_UserRole_n18(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCurrentPrincipalText(): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCurrentPrincipalText();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCurrentPrincipalText();
             return result;
         }
     }
+    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getUserProfile(arg0);
+                return from_candid_opt_n17(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getUserProfile(arg0);
+            return from_candid_opt_n17(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async hasAdmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.hasAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.hasAdmin();
+            return result;
+        }
+    }
+    async initializeAdmin(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.initializeAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.initializeAdmin();
+            return result;
+        }
+    }
+    async isCallerAdmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isCallerAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.saveCallerUserProfile(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.saveCallerUserProfile(arg0);
+            return result;
+        }
+    }
+    async submitStops(arg0: string, arg1: Array<string>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.submitStops(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.submitStops(arg0, arg1);
+            return result;
+        }
+    }
+}
+function from_candid_Booking_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Booking): Booking {
+    return from_candid_record_n10(_uploadFile, _downloadFile, value);
+}
+function from_candid_CarCategory_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _CarCategory): CarCategory {
+    return from_candid_variant_n14(_uploadFile, _downloadFile, value);
+}
+function from_candid_CarModel_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _CarModel): CarModel {
+    return from_candid_variant_n12(_uploadFile, _downloadFile, value);
+}
+function from_candid_UserRole_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
+    return from_candid_variant_n19(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_Booking]): Booking | null {
+    return value.length === 0 ? null : from_candid_Booking_n9(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [[string, _Booking]]): [string, Booking] | null {
+    return value.length === 0 ? null : from_candid_tuple_n8(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    carModel: _CarModel;
+    carCategory: _CarCategory;
+    name: string;
+    seats: bigint;
+    stops: Array<string>;
+    timestamp: _Time;
+    phone: string;
+    price: bigint;
+    luggage: {
+        count: bigint;
+        details: string;
+    };
+}): {
+    carModel: CarModel;
+    carCategory: CarCategory;
+    name: string;
+    seats: bigint;
+    stops: Array<string>;
+    timestamp: Time;
+    phone: string;
+    price: bigint;
+    luggage: {
+        count: bigint;
+        details: string;
+    };
+} {
+    return {
+        carModel: from_candid_CarModel_n11(_uploadFile, _downloadFile, value.carModel),
+        carCategory: from_candid_CarCategory_n13(_uploadFile, _downloadFile, value.carCategory),
+        name: value.name,
+        seats: value.seats,
+        stops: value.stops,
+        timestamp: value.timestamp,
+        phone: value.phone,
+        price: value.price,
+        luggage: value.luggage
+    };
+}
+function from_candid_tuple_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [string, _Booking]): [string, Booking] {
+    return [
+        value[0],
+        from_candid_Booking_n9(_uploadFile, _downloadFile, value[1])
+    ];
+}
+function from_candid_variant_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    xl6: null;
+} | {
+    hyundaiXcent: null;
+} | {
+    alto: null;
+} | {
+    bmw5Series: null;
+} | {
+    marutiCiaz: null;
+} | {
+    innovaCrysta: null;
+} | {
+    swiftDzire: null;
+} | {
+    kiaCarens: null;
+} | {
+    ertiga: null;
+} | {
+    audiA6: null;
+} | {
+    scorpio: null;
+} | {
+    mercedesEClass: null;
+} | {
+    swift: null;
+} | {
+    tavera: null;
+} | {
+    innova: null;
+} | {
+    wagonR: null;
+} | {
+    hondaAmaze: null;
+}): CarModel {
+    return "xl6" in value ? CarModel.xl6 : "hyundaiXcent" in value ? CarModel.hyundaiXcent : "alto" in value ? CarModel.alto : "bmw5Series" in value ? CarModel.bmw5Series : "marutiCiaz" in value ? CarModel.marutiCiaz : "innovaCrysta" in value ? CarModel.innovaCrysta : "swiftDzire" in value ? CarModel.swiftDzire : "kiaCarens" in value ? CarModel.kiaCarens : "ertiga" in value ? CarModel.ertiga : "audiA6" in value ? CarModel.audiA6 : "scorpio" in value ? CarModel.scorpio : "mercedesEClass" in value ? CarModel.mercedesEClass : "swift" in value ? CarModel.swift : "tavera" in value ? CarModel.tavera : "innova" in value ? CarModel.innova : "wagonR" in value ? CarModel.wagonR : "hondaAmaze" in value ? CarModel.hondaAmaze : value;
+}
+function from_candid_variant_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    suv: null;
+} | {
+    sedan: null;
+} | {
+    luxury: null;
+} | {
+    hatchback: null;
+}): CarCategory {
+    return "suv" in value ? CarCategory.suv : "sedan" in value ? CarCategory.sedan : "luxury" in value ? CarCategory.luxury : "hatchback" in value ? CarCategory.hatchback : value;
+}
+function from_candid_variant_n19(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+}): UserRole {
+    return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
+}
+function from_candid_vec_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<[string, _Booking]>): Array<[string, Booking]> {
+    return value.map((x)=>from_candid_tuple_n8(_uploadFile, _downloadFile, x));
+}
+function to_candid_CarCategory_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: CarCategory): _CarCategory {
+    return to_candid_variant_n4(_uploadFile, _downloadFile, value);
+}
+function to_candid_CarModel_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: CarModel): _CarModel {
+    return to_candid_variant_n6(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
+    return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+} {
+    return value == UserRole.admin ? {
+        admin: null
+    } : value == UserRole.user ? {
+        user: null
+    } : value == UserRole.guest ? {
+        guest: null
+    } : value;
+}
+function to_candid_variant_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: CarCategory): {
+    suv: null;
+} | {
+    sedan: null;
+} | {
+    luxury: null;
+} | {
+    hatchback: null;
+} {
+    return value == CarCategory.suv ? {
+        suv: null
+    } : value == CarCategory.sedan ? {
+        sedan: null
+    } : value == CarCategory.luxury ? {
+        luxury: null
+    } : value == CarCategory.hatchback ? {
+        hatchback: null
+    } : value;
+}
+function to_candid_variant_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: CarModel): {
+    xl6: null;
+} | {
+    hyundaiXcent: null;
+} | {
+    alto: null;
+} | {
+    bmw5Series: null;
+} | {
+    marutiCiaz: null;
+} | {
+    innovaCrysta: null;
+} | {
+    swiftDzire: null;
+} | {
+    kiaCarens: null;
+} | {
+    ertiga: null;
+} | {
+    audiA6: null;
+} | {
+    scorpio: null;
+} | {
+    mercedesEClass: null;
+} | {
+    swift: null;
+} | {
+    tavera: null;
+} | {
+    innova: null;
+} | {
+    wagonR: null;
+} | {
+    hondaAmaze: null;
+} {
+    return value == CarModel.xl6 ? {
+        xl6: null
+    } : value == CarModel.hyundaiXcent ? {
+        hyundaiXcent: null
+    } : value == CarModel.alto ? {
+        alto: null
+    } : value == CarModel.bmw5Series ? {
+        bmw5Series: null
+    } : value == CarModel.marutiCiaz ? {
+        marutiCiaz: null
+    } : value == CarModel.innovaCrysta ? {
+        innovaCrysta: null
+    } : value == CarModel.swiftDzire ? {
+        swiftDzire: null
+    } : value == CarModel.kiaCarens ? {
+        kiaCarens: null
+    } : value == CarModel.ertiga ? {
+        ertiga: null
+    } : value == CarModel.audiA6 ? {
+        audiA6: null
+    } : value == CarModel.scorpio ? {
+        scorpio: null
+    } : value == CarModel.mercedesEClass ? {
+        mercedesEClass: null
+    } : value == CarModel.swift ? {
+        swift: null
+    } : value == CarModel.tavera ? {
+        tavera: null
+    } : value == CarModel.innova ? {
+        innova: null
+    } : value == CarModel.wagonR ? {
+        wagonR: null
+    } : value == CarModel.hondaAmaze ? {
+        hondaAmaze: null
+    } : value;
 }
 export interface CreateActorOptions {
     agent?: Agent;
