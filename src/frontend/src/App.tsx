@@ -174,8 +174,7 @@ function App() {
                 <Button
                   asChild
                   size="lg"
-                  variant="outline"
-                  className="border-white text-white hover:bg-white/10"
+                  className="bg-charcoal text-white hover:bg-charcoal/90"
                 >
                   <a href="tel:+919158818546">
                     <Phone className="mr-2 h-5 w-5" />

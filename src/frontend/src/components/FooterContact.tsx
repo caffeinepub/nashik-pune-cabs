@@ -4,10 +4,6 @@ import { Separator } from "./ui/separator";
 
 export default function FooterContact() {
   const currentYear = new Date().getFullYear();
-  const appIdentifier =
-    typeof window !== "undefined"
-      ? encodeURIComponent(window.location.hostname)
-      : "nashik-pune-cabs";
 
   return (
     <footer className="border-t bg-charcoal text-white">
@@ -149,7 +145,10 @@ export default function FooterContact() {
                 <p>Book anytime, day or night</p>
               </div>
             </div>
-            <div className="rounded-lg bg-saffron/10 p-4">
+            <div
+              className="rounded-lg p-4"
+              style={{ backgroundColor: "rgba(234, 179, 8, 0.12)" }}
+            >
               <p className="mb-2 text-sm font-semibold text-saffron">
                 Need Immediate Booking?
               </p>
@@ -168,17 +167,6 @@ export default function FooterContact() {
 
         <div className="flex flex-col items-center justify-between gap-4 text-center text-sm text-gray-400 md:flex-row md:text-left">
           <p>© {currentYear} Nashik Pune Cabs. All rights reserved.</p>
-          <p>
-            Built with ❤️ using{" "}
-            <a
-              href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${appIdentifier}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-saffron transition-colors hover:text-saffron/80"
-            >
-              caffeine.ai
-            </a>
-          </p>
         </div>
       </div>
     </footer>

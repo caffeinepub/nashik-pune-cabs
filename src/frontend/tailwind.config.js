@@ -66,9 +66,9 @@ export default {
                     border: 'oklch(var(--sidebar-border))',
                     ring: 'oklch(var(--sidebar-ring))'
                 },
-                saffron: 'oklch(var(--saffron))',
-                charcoal: 'oklch(var(--charcoal))',
-                'charcoal-light': 'oklch(var(--charcoal-light))'
+                saffron: 'oklch(var(--saffron) / <alpha-value>)',
+                charcoal: 'oklch(var(--charcoal) / <alpha-value>)',
+                'charcoal-light': 'oklch(var(--charcoal-light) / <alpha-value>)'
             },
             borderRadius: {
                 lg: 'var(--radius)',
