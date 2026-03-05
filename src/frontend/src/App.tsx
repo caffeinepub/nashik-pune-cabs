@@ -92,7 +92,7 @@ function App() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-white shadow-sm">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-saffron text-charcoal">
@@ -146,8 +146,20 @@ function App() {
         </div>
       </header>
 
+      {/* Immediate Booking Banner */}
+      <div className="bg-emerald-600 py-2 text-center text-sm font-semibold text-white">
+        <span className="mr-2">Need Immediate Booking?</span>
+        <a
+          href="tel:+919158818546"
+          className="inline-flex items-center gap-1 underline underline-offset-2 hover:text-emerald-100"
+        >
+          <Phone className="h-3.5 w-3.5" />
+          Call Now: +91 91588 18546
+        </a>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-amber-500 to-yellow-400">
+      <section className="relative overflow-hidden bg-gradient-to-br from-sky-700 via-blue-600 to-indigo-700">
         <div className="absolute inset-0 bg-[url('/assets/generated/cab-hero.dim_1600x700.png')] bg-cover bg-center opacity-20" />
         <div className="container relative py-16 md:py-24">
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
@@ -178,7 +190,7 @@ function App() {
                 >
                   <a href="tel:+919158818546">
                     <Phone className="mr-2 h-5 w-5" />
-                    +91 91588 18546
+                    Immediate Booking
                   </a>
                 </Button>
               </div>

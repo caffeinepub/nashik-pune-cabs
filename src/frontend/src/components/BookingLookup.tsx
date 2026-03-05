@@ -216,7 +216,9 @@ export default function BookingLookup() {
     setNotFound(false);
     setFoundByPhone(null);
     resetPhoneError();
-    findByPhone(phoneInput.trim(), {
+    // Normalize: strip spaces, dashes, parentheses so backend validation passes
+    const normalizedPhone = phoneInput.trim().replace(/[\s\-().]/g, "");
+    findByPhone(normalizedPhone, {
       onSuccess: (result) => {
         if (result && Array.isArray(result) && result.length === 2) {
           setFoundByPhone(result as [string, Booking]);
