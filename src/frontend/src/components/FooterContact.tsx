@@ -145,6 +145,21 @@ export default function FooterContact() {
                 <p>Book anytime, day or night</p>
               </div>
             </div>
+            <div
+              className="rounded-lg p-4"
+              style={{ backgroundColor: "rgba(234, 179, 8, 0.12)" }}
+            >
+              <p className="mb-2 text-sm font-semibold text-saffron">
+                Need Immediate Booking?
+              </p>
+              <a
+                href="tel:+919158818546"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-saffron"
+              >
+                <Phone className="h-4 w-4" />
+                Call Now: +91 91588 18546
+              </a>
+            </div>
           </div>
         </div>
 

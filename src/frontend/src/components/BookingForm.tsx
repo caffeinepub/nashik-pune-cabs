@@ -1,10 +1,15 @@
 import {
   Calendar as CalendarIcon,
+  CheckCircle2,
+  ChevronDown,
   IndianRupee,
   Loader2,
+  LocateFixed,
+  MapPin,
   Navigation,
   Package,
   Plus,
+  Search,
   Users,
   X,
 } from "lucide-react";
@@ -30,6 +35,168 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+
+// All major Nashik localities
+const NASHIK_LOCATIONS = [
+  "Nashik CBS",
+  "Nashik Road",
+  "Gangapur Road",
+  "College Road",
+  "Dwarka",
+  "Cidco",
+  "Panchavati",
+  "Satpur",
+  "Ambad",
+  "Trimbak Road",
+  "Pathardi Phata",
+  "Nashik Phata",
+  "Indira Nagar",
+  "Peth Road",
+  "Mahatma Nagar",
+  "Shalimar",
+  "Sharanpur Road",
+  "Tidke Colony",
+  "Jail Road",
+  "MG Road",
+  "Thakkar Bazar",
+  "Deolali",
+  "Igatpuri",
+  "Sinnar",
+  "Ozar",
+  "Dindori",
+  "Mhasrul",
+  "Adgaon",
+  "Govardhan",
+  "Nashik Village",
+  "Tapovan",
+  "Anandvalli",
+  "Bytco Point",
+  "Canada Corner",
+  "Nashik East",
+  "Nashik West",
+  "Nashik Central",
+  "Trimbakeshwar",
+  "Nandur Madhyameshwar",
+  "Yeola",
+  "Manmad",
+  "Niphad",
+  "Chandwad",
+  "Kalwan",
+  "Surgana",
+  "Baglan",
+  "Malegaon",
+];
+
+// All major Pune localities (mirroring Nashik structure)
+const PUNE_LOCATIONS = [
+  "Pune Station",
+  "Pune Airport",
+  "Shivajinagar",
+  "Kothrud",
+  "Hinjewadi",
+  "Wakad",
+  "Baner",
+  "Aundh",
+  "Viman Nagar",
+  "Koregaon Park",
+  "Kalyani Nagar",
+  "Hadapsar",
+  "Kharadi",
+  "Magarpatta",
+  "Wanowrie",
+  "Kondhwa",
+  "Katraj",
+  "Swargate",
+  "Deccan Gymkhana",
+  "FC Road",
+  "JM Road",
+  "Pimpri",
+  "Chinchwad",
+  "Akurdi",
+  "Nigdi",
+  "Bhosari",
+  "Alandi",
+  "Chakan",
+  "Talegaon",
+  "Lonavala",
+  "Kamshet",
+  "Dehu Road",
+  "Pimpri Chinchwad",
+  "Bhugaon",
+  "Bavdhan",
+  "Pashan",
+  "Sus",
+  "Mahalunge",
+  "Balewadi",
+  "Tathawade",
+  "Ravet",
+  "Punawale",
+  "Moshi",
+  "Dighi",
+  "Dhanori",
+  "Lohegaon",
+  "Wagholi",
+  "Nagar Road",
+  "Mundhwa",
+  "Undri",
+];
+
+// All major Mumbai localities
+const MUMBAI_LOCATIONS = [
+  "Mumbai Central",
+  "Dadar",
+  "Bandra",
+  "Andheri",
+  "Borivali",
+  "Thane",
+  "Navi Mumbai",
+  "Kurla",
+  "Chembur",
+  "Ghatkopar",
+  "Mulund",
+  "Vikhroli",
+  "Powai",
+  "Goregaon",
+  "Malad",
+  "Kandivali",
+  "Dahisar",
+  "Mira Road",
+  "Bhayander",
+  "Vasai",
+  "Virar",
+  "Panvel",
+  "Vashi",
+  "Nerul",
+  "Belapur",
+  "Kharghar",
+  "Airoli",
+  "Mumbai Airport (T2)",
+  "Mumbai Airport (T1)",
+  "Worli",
+  "Lower Parel",
+  "Parel",
+  "Sewri",
+  "Wadala",
+  "Sion",
+  "Dharavi",
+  "CST",
+  "Fort",
+  "Churchgate",
+  "Colaba",
+  "Nariman Point",
+  "Marine Lines",
+];
+
+// Combined locations for pickup (Nashik) and drop (Pune + Mumbai + others)
+const ALL_PICKUP_LOCATIONS = NASHIK_LOCATIONS;
+const ALL_DROP_LOCATIONS = [
+  ...PUNE_LOCATIONS,
+  ...MUMBAI_LOCATIONS,
+  "Mumbai",
+  "Mumbai Airport",
+  "Nashik",
+  ...NASHIK_LOCATIONS.filter((l) => l !== "Nashik CBS"),
+];
 
 // Car category → models mapping (no luxury, no hatchback)
 const CAR_CATEGORY_MODELS: Record<
@@ -58,14 +225,27 @@ const CAR_CATEGORY_LABELS: Record<CarCategory.sedan | CarCategory.suv, string> =
     [CarCategory.suv]: "SUV (6-7 seater)",
   };
 
-// Base prices per category (INR)
+// Base prices per category (INR) — for 1 seat, 0 luggage
 const BASE_PRICES: Record<CarCategory.sedan | CarCategory.suv, number> = {
   [CarCategory.sedan]: 2800,
   [CarCategory.suv]: 4000,
 };
 
-function calculateFare(category: CarCategory.sedan | CarCategory.suv): number {
-  return BASE_PRICES[category];
+// Extra charge per additional seat (beyond 1)
+const PRICE_PER_EXTRA_SEAT = 200;
+
+// Extra charge per luggage bag
+const PRICE_PER_LUGGAGE = 100;
+
+function calculateFare(
+  category: CarCategory.sedan | CarCategory.suv,
+  seats: number,
+  luggage: number,
+): number {
+  const base = BASE_PRICES[category];
+  const seatExtra = Math.max(0, seats - 1) * PRICE_PER_EXTRA_SEAT;
+  const luggageExtra = luggage * PRICE_PER_LUGGAGE;
+  return base + seatExtra + luggageExtra;
 }
 
 // Max seats per category
@@ -76,6 +256,267 @@ const MAX_SEATS: Record<CarCategory.sedan | CarCategory.suv, number> = {
 
 const AVAILABLE_CATEGORIES = [CarCategory.sedan, CarCategory.suv] as const;
 type AvailableCategory = (typeof AVAILABLE_CATEGORIES)[number];
+
+// ─── Blinkit-style Location Picker Modal ────────────────────────────────────
+
+interface LocationPickerModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSelect: (location: string) => void;
+  locations: string[];
+  selected: string;
+  title: string;
+  placeholder: string;
+  onUseCurrentLocation?: () => void;
+  isLocating?: boolean;
+  locationError?: string;
+}
+
+function LocationPickerModal({
+  isOpen,
+  onClose,
+  onSelect,
+  locations,
+  selected,
+  title,
+  placeholder,
+  onUseCurrentLocation,
+  isLocating,
+  locationError,
+}: LocationPickerModalProps) {
+  const [search, setSearch] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-focus search input when panel opens
+  useEffect(() => {
+    if (isOpen) {
+      setSearch("");
+      setTimeout(() => searchRef.current?.focus(), 50);
+    }
+  }, [isOpen]);
+
+  // Close on Escape
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [isOpen, onClose]);
+
+  // Prevent body scroll when modal open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const filtered = search.trim()
+    ? locations.filter((loc) =>
+        loc.toLowerCase().includes(search.toLowerCase()),
+      )
+    : locations;
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-end justify-center sm:items-center"
+      aria-label={title}
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") onClose();
+        }}
+        role="button"
+        tabIndex={-1}
+        aria-label="Close location picker"
+      />
+
+      {/* Panel */}
+      <div
+        className="relative z-10 flex w-full flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-w-md sm:rounded-2xl"
+        style={{ maxHeight: "85vh" }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-border bg-white px-4 py-4">
+          <h2 className="text-base font-bold text-foreground">{title}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            aria-label="Close location picker"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Use Current Location CTA */}
+        {onUseCurrentLocation && (
+          <div className="border-b border-border bg-white px-4 py-3">
+            <button
+              type="button"
+              onClick={() => {
+                onUseCurrentLocation();
+                // Don't close immediately, let locating happen
+              }}
+              disabled={isLocating}
+              className="flex w-full items-center gap-3 rounded-xl border-2 border-saffron/30 bg-saffron/5 px-4 py-3 text-left transition-colors hover:border-saffron/60 hover:bg-saffron/10 disabled:opacity-60"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-saffron/20">
+                {isLocating ? (
+                  <Loader2 className="h-5 w-5 animate-spin text-saffron" />
+                ) : (
+                  <LocateFixed className="h-5 w-5 text-saffron" />
+                )}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {isLocating
+                    ? "Detecting your location..."
+                    : "Use Current Location"}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {isLocating ? "Please wait" : "Auto-detect via GPS"}
+                </p>
+              </div>
+            </button>
+            {locationError && (
+              <p className="mt-2 text-xs text-destructive">{locationError}</p>
+            )}
+          </div>
+        )}
+
+        {/* Search Input */}
+        <div className="sticky top-0 z-10 border-b border-border bg-white px-4 py-3">
+          <div className="flex items-center gap-3 rounded-xl border-2 border-input bg-white px-4 py-2.5 focus-within:border-saffron focus-within:ring-2 focus-within:ring-saffron/20">
+            <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <input
+              ref={searchRef}
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={placeholder}
+              className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Location List */}
+        <div ref={scrollRef} className="overflow-y-auto overscroll-contain">
+          {filtered.length > 0 ? (
+            <ul className="py-2">
+              {filtered.map((loc, idx) => {
+                const isSelected = selected === loc;
+                return (
+                  <li key={loc}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onSelect(loc);
+                        onClose();
+                      }}
+                      className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${
+                        isSelected
+                          ? "bg-saffron/10 text-saffron"
+                          : "hover:bg-accent"
+                      } ${idx !== filtered.length - 1 ? "border-b border-border/50" : ""}`}
+                    >
+                      <div
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${isSelected ? "bg-saffron/20" : "bg-muted"}`}
+                      >
+                        {isSelected ? (
+                          <CheckCircle2 className="h-4 w-4 text-saffron" />
+                        ) : (
+                          <MapPin className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </div>
+                      <span
+                        className={`text-sm ${isSelected ? "font-semibold" : "font-medium text-foreground"}`}
+                      >
+                        {loc}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted">
+                <Search className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  No locations found
+                </p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  No results for &ldquo;{search}&rdquo;
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Location Trigger Button ─────────────────────────────────────────────────
+
+interface LocationTriggerProps {
+  value: string;
+  placeholder: string;
+  hasError: boolean;
+  onClick: () => void;
+}
+
+function LocationTrigger({
+  value,
+  placeholder,
+  hasError,
+  onClick,
+}: LocationTriggerProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex w-full items-center justify-between rounded-xl border-2 bg-white px-4 py-3 text-left transition-all hover:border-saffron/60 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-saffron/30 ${
+        hasError ? "border-destructive" : "border-input"
+      }`}
+    >
+      <span className="flex min-w-0 items-center gap-3">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-saffron/15">
+          <MapPin className="h-4 w-4 text-saffron" />
+        </div>
+        <span
+          className={`truncate text-sm ${value ? "font-medium text-foreground" : "text-muted-foreground"}`}
+        >
+          {value || placeholder}
+        </span>
+      </span>
+      <ChevronDown className="ml-2 h-4 w-4 shrink-0 text-muted-foreground" />
+    </button>
+  );
+}
 
 // ─── Main Booking Form ────────────────────────────────────────────────────────
 
@@ -91,7 +532,7 @@ export default function BookingForm({
   const [formData, setFormData] = useState<BookingData>({
     name: "",
     phone: "",
-    pickup: prefillData?.pickup ?? "",
+    pickup: prefillData?.pickup ?? "Nashik CBS",
     drop: prefillData?.drop ?? "Pune Station",
     date: "",
     time: "",
@@ -101,9 +542,13 @@ export default function BookingForm({
     carModel: CarModel.swiftDzire,
   });
 
-  // Seats and luggage as string to avoid leading-zero / zero-on-backspace issues
-  const [seatsStr, setSeatsStr] = useState<string>("1");
-  const [luggageStr, setLuggageStr] = useState<string>("1");
+  // Current location state
+  const [locating, setLocating] = useState(false);
+  const [locationError, setLocationError] = useState<string>("");
+
+  // Location picker modal state
+  const [pickupModalOpen, setPickupModalOpen] = useState(false);
+  const [dropModalOpen, setDropModalOpen] = useState(false);
 
   // Car model state
   const [selectedCategory, setSelectedCategory] = useState<AvailableCategory>(
@@ -123,15 +568,15 @@ export default function BookingForm({
   const [timeAmPm, setTimeAmPm] = useState<"AM" | "PM">("AM");
 
   // Price state
-  const [price, setPrice] = useState<number>(calculateFare(CarCategory.sedan));
+  const [price, setPrice] = useState<number>(BASE_PRICES[CarCategory.sedan]);
   const [priceEdited, setPriceEdited] = useState(false);
 
-  // Luggage details (separate from count)
-  const [luggageDetails, setLuggageDetails] = useState<string>("");
+  // Seats state
+  const [seats, setSeats] = useState<number>(1);
 
-  // Derive numeric seats/luggage from string state
-  const seats = seatsStr === "" ? 0 : Number(seatsStr);
-  const luggageCount = luggageStr === "" ? 0 : Number(luggageStr);
+  // Luggage state
+  const [luggageCount, setLuggageCount] = useState<number>(1);
+  const [luggageDetails, setLuggageDetails] = useState<string>("");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { mutate: createBooking, isPending, error } = useCreateBooking();
@@ -160,12 +605,86 @@ export default function BookingForm({
     setFormData((prev) => ({ ...prev, time: formatted }));
   }, [timeHour, timeMinute, timeAmPm]);
 
-  // Auto-recalculate price when category changes (unless user manually edited)
+  // Auto-recalculate price when category, seats, or luggage changes (unless user manually edited)
   useEffect(() => {
     if (!priceEdited) {
-      setPrice(calculateFare(selectedCategory));
+      setPrice(calculateFare(selectedCategory, seats, luggageCount));
     }
-  }, [selectedCategory, priceEdited]);
+  }, [selectedCategory, seats, luggageCount, priceEdited]);
+
+  const handleGetCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError("Geolocation is not supported by your browser.");
+      return;
+    }
+    setLocating(true);
+    setLocationError("");
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+
+          // Use AbortController to enforce a fetch timeout
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+          let suburb = "";
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&accept-language=en`,
+              { signal: controller.signal },
+            );
+            clearTimeout(timeoutId);
+            const data = await response.json();
+            suburb =
+              data.address?.suburb ||
+              data.address?.neighbourhood ||
+              data.address?.village ||
+              data.address?.town ||
+              data.address?.city_district ||
+              data.address?.city ||
+              data.display_name?.split(",")[0] ||
+              "";
+          } catch {
+            clearTimeout(timeoutId);
+            // Geocoding failed — fall back to coordinates
+          }
+
+          // Always set a location value — either the geocoded suburb or raw coordinates
+          const locationValue = suburb.trim()
+            ? suburb.trim()
+            : `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+
+          handleChange("pickup", locationValue);
+          // Always close the modal after successfully obtaining a position
+          setPickupModalOpen(false);
+        } catch {
+          setLocationError(
+            "Could not determine your location. Please select manually.",
+          );
+        } finally {
+          setLocating(false);
+        }
+      },
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          setLocationError(
+            "Location access denied. Please allow location access in your browser settings and try again.",
+          );
+        } else if (err.code === err.TIMEOUT) {
+          setLocationError(
+            "Location request timed out. Please try again or select manually.",
+          );
+        } else {
+          setLocationError(
+            "Unable to get your location. Please select manually.",
+          );
+        }
+        setLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+    );
+  };
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -258,8 +777,8 @@ export default function BookingForm({
     const firstModel = CAR_CATEGORY_MODELS[cat][0].value;
     setSelectedModel(firstModel);
     // Reset seats if over new max
-    if (seats > MAX_SEATS[cat]) setSeatsStr(String(MAX_SEATS[cat]));
-    // Let price auto-recalculate for new category (base price only)
+    if (seats > MAX_SEATS[cat]) setSeats(MAX_SEATS[cat]);
+    // Let price auto-recalculate for new category
     setPriceEdited(false);
     if (errors.carModel) setErrors((prev) => ({ ...prev, carModel: "" }));
   };
@@ -267,6 +786,14 @@ export default function BookingForm({
   const handleModelChange = (model: CarModel) => {
     setSelectedModel(model);
     if (errors.carModel) setErrors((prev) => ({ ...prev, carModel: "" }));
+  };
+
+  const handlePickupSelect = (location: string) => {
+    handleChange("pickup", location);
+  };
+
+  const handleDropSelect = (location: string) => {
+    handleChange("drop", location);
   };
 
   // Stops handlers
@@ -303,6 +830,31 @@ export default function BookingForm({
 
   return (
     <>
+      {/* Pickup Location Picker Modal */}
+      <LocationPickerModal
+        isOpen={pickupModalOpen}
+        onClose={() => setPickupModalOpen(false)}
+        onSelect={handlePickupSelect}
+        locations={ALL_PICKUP_LOCATIONS}
+        selected={formData.pickup}
+        title="Select Pickup Location"
+        placeholder="Search for area, street name..."
+        onUseCurrentLocation={handleGetCurrentLocation}
+        isLocating={locating}
+        locationError={locationError}
+      />
+
+      {/* Drop Location Picker Modal */}
+      <LocationPickerModal
+        isOpen={dropModalOpen}
+        onClose={() => setDropModalOpen(false)}
+        onSelect={handleDropSelect}
+        locations={ALL_DROP_LOCATIONS}
+        selected={formData.drop}
+        title="Select Drop Location"
+        placeholder="Search for area, street name..."
+      />
+
       <Card className="mx-auto max-w-4xl border-2 shadow-xl">
         <CardHeader className="space-y-1 bg-gradient-to-r from-saffron/10 to-saffron/5">
           <CardTitle className="text-2xl font-bold">Book Your Cab</CardTitle>
@@ -316,17 +868,17 @@ export default function BookingForm({
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Trip Details</h3>
               <div className="grid gap-4 sm:grid-cols-2">
-                {/* Pickup Location - plain text input */}
+                {/* Pickup Location - Blinkit-style picker */}
                 <div className="space-y-2">
-                  <Label htmlFor="pickup">Pickup Location</Label>
-                  <Input
-                    id="pickup"
-                    type="text"
+                  <Label htmlFor="pickup-trigger">Pickup Location</Label>
+                  <LocationTrigger
                     value={formData.pickup}
-                    onChange={(e) => handleChange("pickup", e.target.value)}
-                    placeholder="Enter your pickup address"
-                    className={errors.pickup ? "border-destructive" : ""}
-                    data-ocid="booking.pickup.input"
+                    placeholder="Select pickup location"
+                    hasError={!!errors.pickup}
+                    onClick={() => {
+                      setLocationError("");
+                      setPickupModalOpen(true);
+                    }}
                   />
                   {errors.pickup && (
                     <p
@@ -338,17 +890,14 @@ export default function BookingForm({
                   )}
                 </div>
 
-                {/* Drop Location - plain text input */}
+                {/* Drop Location - Blinkit-style picker */}
                 <div className="space-y-2">
-                  <Label htmlFor="drop">Drop Location</Label>
-                  <Input
-                    id="drop"
-                    type="text"
+                  <Label htmlFor="drop-trigger">Drop Location</Label>
+                  <LocationTrigger
                     value={formData.drop}
-                    onChange={(e) => handleChange("drop", e.target.value)}
-                    placeholder="Enter your drop address"
-                    className={errors.drop ? "border-destructive" : ""}
-                    data-ocid="booking.drop.input"
+                    placeholder="Select drop location"
+                    hasError={!!errors.drop}
+                    onClick={() => setDropModalOpen(true)}
                   />
                   {errors.drop && (
                     <p
@@ -643,8 +1192,10 @@ export default function BookingForm({
                     </p>
                   )}
                   <p className="text-xs text-muted-foreground">
-                    Base fare ₹
-                    {BASE_PRICES[selectedCategory].toLocaleString("en-IN")} —{" "}
+                    Base ₹
+                    {BASE_PRICES[selectedCategory].toLocaleString("en-IN")} + ₹
+                    {PRICE_PER_EXTRA_SEAT}/extra seat + ₹{PRICE_PER_LUGGAGE}
+                    /bag —{" "}
                     <span className="font-medium text-amber-600 dark:text-amber-400">
                       excluding toll fees
                     </span>
@@ -708,23 +1259,16 @@ export default function BookingForm({
                   </Label>
                   <Input
                     id="seats"
-                    type="text"
-                    inputMode="numeric"
-                    value={seatsStr}
+                    type="number"
+                    min={1}
+                    max={maxSeats}
+                    value={seats}
                     onChange={(e) => {
-                      const raw = e.target.value.replace(/[^0-9]/g, "");
-                      // Remove leading zeros
-                      const cleaned = raw === "" ? "" : String(Number(raw));
-                      setSeatsStr(cleaned);
+                      setSeats(Number(e.target.value));
+                      setPriceEdited(false);
                       if (errors.seats)
                         setErrors((prev) => ({ ...prev, seats: "" }));
                     }}
-                    onBlur={() => {
-                      // On blur, enforce min 1
-                      if (seatsStr === "" || Number(seatsStr) < 1)
-                        setSeatsStr("1");
-                    }}
-                    placeholder="1"
                     className={errors.seats ? "border-destructive" : ""}
                     data-ocid="booking.seats.input"
                   />
@@ -752,22 +1296,16 @@ export default function BookingForm({
                   </Label>
                   <Input
                     id="luggageCount"
-                    type="text"
-                    inputMode="numeric"
-                    value={luggageStr}
+                    type="number"
+                    min={0}
+                    max={10}
+                    value={luggageCount}
                     onChange={(e) => {
-                      const raw = e.target.value.replace(/[^0-9]/g, "");
-                      // Remove leading zeros but allow 0
-                      const cleaned = raw === "" ? "" : String(Number(raw));
-                      setLuggageStr(cleaned);
+                      setLuggageCount(Number(e.target.value));
+                      setPriceEdited(false);
                       if (errors.luggageCount)
                         setErrors((prev) => ({ ...prev, luggageCount: "" }));
                     }}
-                    onBlur={() => {
-                      // On blur, default to 0 if empty
-                      if (luggageStr === "") setLuggageStr("0");
-                    }}
-                    placeholder="0"
                     className={errors.luggageCount ? "border-destructive" : ""}
                     data-ocid="booking.luggage.input"
                   />
@@ -820,7 +1358,7 @@ export default function BookingForm({
                   Booking...
                 </>
               ) : (
-                "Book Now"
+                "Confirm Booking"
               )}
             </Button>
           </form>

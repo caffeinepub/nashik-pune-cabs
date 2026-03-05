@@ -57,7 +57,7 @@ const CAR_MODEL_LABELS: Record<CarModel, string> = {
 };
 
 // Admin WhatsApp number that receives all booking notifications
-const ADMIN_WHATSAPP_NUMBER = "919158818546";
+const ADMIN_WHATSAPP_NUMBER = "918010374431";
 
 function buildWhatsAppMessage(
   referenceId: string,

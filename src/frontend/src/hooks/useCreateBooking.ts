@@ -23,12 +23,9 @@ export function useCreateBooking() {
         throw new Error("Actor not initialized");
       }
 
-      // Strip spaces and hyphens from phone so backend validation passes
-      const cleanPhone = input.phone.replace(/[\s\-]/g, "");
-
       const result = await actor.createBooking(
         input.name,
-        cleanPhone,
+        input.phone,
         input.carCategory,
         input.carModel,
         BigInt(input.price),
