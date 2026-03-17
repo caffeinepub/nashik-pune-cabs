@@ -232,20 +232,11 @@ const BASE_PRICES: Record<CarCategory.sedan | CarCategory.suv, number> = {
 };
 
 // Extra charge per additional seat (beyond 1)
-const PRICE_PER_EXTRA_SEAT = 200;
 
 // Extra charge per luggage bag
-const PRICE_PER_LUGGAGE = 100;
 
-function calculateFare(
-  category: CarCategory.sedan | CarCategory.suv,
-  seats: number,
-  luggage: number,
-): number {
-  const base = BASE_PRICES[category];
-  const seatExtra = Math.max(0, seats - 1) * PRICE_PER_EXTRA_SEAT;
-  const luggageExtra = luggage * PRICE_PER_LUGGAGE;
-  return base + seatExtra + luggageExtra;
+function calculateFare(category: CarCategory.sedan | CarCategory.suv): number {
+  return BASE_PRICES[category];
 }
 
 // Max seats per category
@@ -480,44 +471,6 @@ function LocationPickerModal({
   );
 }
 
-// ─── Location Trigger Button ─────────────────────────────────────────────────
-
-interface LocationTriggerProps {
-  value: string;
-  placeholder: string;
-  hasError: boolean;
-  onClick: () => void;
-}
-
-function LocationTrigger({
-  value,
-  placeholder,
-  hasError,
-  onClick,
-}: LocationTriggerProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`flex w-full items-center justify-between rounded-xl border-2 bg-white px-4 py-3 text-left transition-all hover:border-saffron/60 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-saffron/30 ${
-        hasError ? "border-destructive" : "border-input"
-      }`}
-    >
-      <span className="flex min-w-0 items-center gap-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-saffron/15">
-          <MapPin className="h-4 w-4 text-saffron" />
-        </div>
-        <span
-          className={`truncate text-sm ${value ? "font-medium text-foreground" : "text-muted-foreground"}`}
-        >
-          {value || placeholder}
-        </span>
-      </span>
-      <ChevronDown className="ml-2 h-4 w-4 shrink-0 text-muted-foreground" />
-    </button>
-  );
-}
-
 // ─── Main Booking Form ────────────────────────────────────────────────────────
 
 interface BookingFormProps {
@@ -608,9 +561,9 @@ export default function BookingForm({
   // Auto-recalculate price when category, seats, or luggage changes (unless user manually edited)
   useEffect(() => {
     if (!priceEdited) {
-      setPrice(calculateFare(selectedCategory, seats, luggageCount));
+      setPrice(calculateFare(selectedCategory));
     }
-  }, [selectedCategory, seats, luggageCount, priceEdited]);
+  }, [selectedCategory, priceEdited]);
 
   const handleGetCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -868,17 +821,17 @@ export default function BookingForm({
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Trip Details</h3>
               <div className="grid gap-4 sm:grid-cols-2">
-                {/* Pickup Location - Blinkit-style picker */}
+                {/* Pickup Location - plain text input */}
                 <div className="space-y-2">
-                  <Label htmlFor="pickup-trigger">Pickup Location</Label>
-                  <LocationTrigger
+                  <Label htmlFor="pickup">Pickup Location</Label>
+                  <Input
+                    id="pickup"
+                    type="text"
+                    placeholder="Enter pickup location"
                     value={formData.pickup}
-                    placeholder="Select pickup location"
-                    hasError={!!errors.pickup}
-                    onClick={() => {
-                      setLocationError("");
-                      setPickupModalOpen(true);
-                    }}
+                    onChange={(e) => handleChange("pickup", e.target.value)}
+                    className={errors.pickup ? "border-destructive" : ""}
+                    data-ocid="booking.pickup.input"
                   />
                   {errors.pickup && (
                     <p
@@ -890,14 +843,17 @@ export default function BookingForm({
                   )}
                 </div>
 
-                {/* Drop Location - Blinkit-style picker */}
+                {/* Drop Location - plain text input */}
                 <div className="space-y-2">
-                  <Label htmlFor="drop-trigger">Drop Location</Label>
-                  <LocationTrigger
+                  <Label htmlFor="drop">Drop Location</Label>
+                  <Input
+                    id="drop"
+                    type="text"
+                    placeholder="Enter drop location"
                     value={formData.drop}
-                    placeholder="Select drop location"
-                    hasError={!!errors.drop}
-                    onClick={() => setDropModalOpen(true)}
+                    onChange={(e) => handleChange("drop", e.target.value)}
+                    className={errors.drop ? "border-destructive" : ""}
+                    data-ocid="booking.drop.input"
                   />
                   {errors.drop && (
                     <p
@@ -1192,10 +1148,8 @@ export default function BookingForm({
                     </p>
                   )}
                   <p className="text-xs text-muted-foreground">
-                    Base ₹
-                    {BASE_PRICES[selectedCategory].toLocaleString("en-IN")} + ₹
-                    {PRICE_PER_EXTRA_SEAT}/extra seat + ₹{PRICE_PER_LUGGAGE}
-                    /bag —{" "}
+                    Base fare: ₹
+                    {BASE_PRICES[selectedCategory].toLocaleString("en-IN")} —{" "}
                     <span className="font-medium text-amber-600 dark:text-amber-400">
                       excluding toll fees
                     </span>

@@ -1,5 +1,4 @@
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
-import { SiFacebook, SiInstagram, SiX } from "react-icons/si";
 import { Separator } from "./ui/separator";
 
 export default function FooterContact() {
@@ -39,35 +38,6 @@ export default function FooterContact() {
               Your trusted partner for comfortable and reliable cab service
               between Nashik and Pune.
             </p>
-            <div className="flex gap-3">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-saffron hover:text-charcoal"
-                aria-label="Facebook"
-              >
-                <SiFacebook className="h-4 w-4" />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-saffron hover:text-charcoal"
-                aria-label="Instagram"
-              >
-                <SiInstagram className="h-4 w-4" />
-              </a>
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-saffron hover:text-charcoal"
-                aria-label="X (Twitter)"
-              >
-                <SiX className="h-4 w-4" />
-              </a>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -122,10 +92,10 @@ export default function FooterContact() {
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-saffron" />
                 <a
-                  href="mailto:info@nashikpunecabs.com"
+                  href="mailto:nashiktopunecabs@gmail.com"
                   className="transition-colors hover:text-saffron"
                 >
-                  info@nashikpunecabs.com
+                  nashiktopunecabs@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-2">
@@ -144,21 +114,6 @@ export default function FooterContact() {
                 <p className="font-semibold text-white">24/7 Available</p>
                 <p>Book anytime, day or night</p>
               </div>
-            </div>
-            <div
-              className="rounded-lg p-4"
-              style={{ backgroundColor: "rgba(234, 179, 8, 0.12)" }}
-            >
-              <p className="mb-2 text-sm font-semibold text-saffron">
-                Need Immediate Booking?
-              </p>
-              <a
-                href="tel:+919158818546"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-saffron"
-              >
-                <Phone className="h-4 w-4" />
-                Call Now: +91 91588 18546
-              </a>
             </div>
           </div>
         </div>

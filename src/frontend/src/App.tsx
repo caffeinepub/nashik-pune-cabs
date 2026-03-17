@@ -178,7 +178,7 @@ function App() {
                 >
                   <a href="tel:+919158818546">
                     <Phone className="mr-2 h-5 w-5" />
-                    +91 91588 18546
+                    Need Immediate Booking?
                   </a>
                 </Button>
               </div>
