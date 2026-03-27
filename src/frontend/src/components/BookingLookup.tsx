@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Booking } from "../backend";
 import { useActor } from "../hooks/useActor";
 
@@ -12,17 +12,17 @@ const CAR_MODEL_LABELS: Record<string, string> = {
   hyundaiAura: "Aura",
   toyotaEtios: "Etios",
   hondaCity: "Honda City",
+  hyundaiXcent: "Aura",
+  wagonR: "Etios",
+  hondaAmaze: "Honda City",
   ertiga: "Ertiga",
   xl6: "XL6",
   kiaCarens: "Kia Carens",
   innova: "Innova",
   innovaCrysta: "Innova Crysta",
   tavera: "Tavera",
-  hondaAmaze: "Honda Amaze",
-  hyundaiXcent: "Hyundai Xcent",
   alto: "Alto",
   swift: "Swift",
-  wagonR: "WagonR",
   scorpio: "Scorpio",
 };
 
@@ -32,28 +32,32 @@ export default function BookingLookup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [searched, setSearched] = useState(false);
+  const [waitingForActor, setWaitingForActor] = useState(false);
   const { actor, isFetching: actorLoading } = useActor();
+  const pendingIdRef = useRef<string | null>(null);
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmedId = bookingId.trim();
-    if (!trimmedId) return;
+  // Auto-trigger search once actor becomes available
+  useEffect(() => {
+    if (actor && pendingIdRef.current) {
+      const id = pendingIdRef.current;
+      pendingIdRef.current = null;
+      setWaitingForActor(false);
+      doSearch(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actor]);
 
+  const doSearch = async (id: string) => {
     setLoading(true);
     setError("");
     setResult(null);
     setSearched(true);
-
     try {
-      if (!actor) {
-        setError("Connection not ready. Please wait a moment and try again.");
-        return;
-      }
-      const booking = await actor.getBookingById(trimmedId);
+      const booking = await actor!.getBookingById(id);
       if (booking == null) {
         setError("No booking found with this ID. Please check and try again.");
       } else {
-        setResult({ id: trimmedId, ...booking });
+        setResult({ id, ...booking });
       }
     } catch (err) {
       console.error("Booking lookup error:", err);
@@ -61,6 +65,24 @@ export default function BookingLookup() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedId = bookingId.trim();
+    if (!trimmedId) return;
+
+    setSearched(true);
+    setError("");
+    setResult(null);
+
+    if (!actor) {
+      // Queue the search — it will auto-fire when actor loads
+      pendingIdRef.current = trimmedId;
+      setWaitingForActor(true);
+      return;
+    }
+    await doSearch(trimmedId);
   };
 
   const carModelLabel = result
@@ -86,7 +108,7 @@ export default function BookingLookup() {
           <Input
             id="bookingId"
             data-ocid="booking_lookup.search_input"
-            placeholder="Enter Booking ID (e.g. B-001)"
+            placeholder="Enter Booking ID (e.g. NPC1)"
             value={bookingId}
             onChange={(e) => setBookingId(e.target.value)}
             disabled={loading}
@@ -95,11 +117,11 @@ export default function BookingLookup() {
         <Button
           type="submit"
           data-ocid="booking_lookup.submit_button"
-          disabled={loading || !bookingId.trim() || actorLoading}
+          disabled={loading || !bookingId.trim()}
           className="text-white"
           style={{ backgroundColor: "#d97706" }}
         >
-          {loading || actorLoading ? (
+          {loading || waitingForActor ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
             <Search className="h-4 w-4" />
@@ -110,6 +132,13 @@ export default function BookingLookup() {
       {actorLoading && !searched && (
         <p className="mt-3 text-sm text-amber-600 flex items-center gap-2">
           <Loader2 className="h-3 w-3 animate-spin" /> Connecting...
+        </p>
+      )}
+
+      {waitingForActor && (
+        <p className="mt-3 text-sm text-amber-600 flex items-center gap-2">
+          <Loader2 className="h-3 w-3 animate-spin" /> Connecting to server,
+          searching automatically...
         </p>
       )}
 
