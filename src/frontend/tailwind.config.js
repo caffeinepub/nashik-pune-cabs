@@ -5,14 +5,12 @@ import animate from 'tailwindcss-animate';
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ['class'],
-    content: ['index.html', 'plain.html', 'src/**/*.{js,ts,jsx,tsx,html,css}'],
+    content: ['index.html', 'src/**/*.{js,ts,jsx,tsx,html,css}'],
     theme: {
         container: {
             center: true,
             padding: '2rem',
-            screens: {
-                '2xl': '1400px'
-            }
+            screens: { '2xl': '1400px' }
         },
         extend: {
             colors: {
@@ -56,38 +54,18 @@ export default {
                     4: 'oklch(var(--chart-4))',
                     5: 'oklch(var(--chart-5))'
                 },
-                sidebar: {
-                    DEFAULT: 'oklch(var(--sidebar))',
-                    foreground: 'oklch(var(--sidebar-foreground))',
-                    primary: 'oklch(var(--sidebar-primary))',
-                    'primary-foreground': 'oklch(var(--sidebar-primary-foreground))',
-                    accent: 'oklch(var(--sidebar-accent))',
-                    'accent-foreground': 'oklch(var(--sidebar-accent-foreground))',
-                    border: 'oklch(var(--sidebar-border))',
-                    ring: 'oklch(var(--sidebar-ring))'
-                },
                 saffron: 'oklch(var(--saffron) / <alpha-value>)',
-                charcoal: 'oklch(var(--charcoal) / <alpha-value>)',
-                'charcoal-light': 'oklch(var(--charcoal-light) / <alpha-value>)'
+                'saffron-dark': 'oklch(var(--saffron-dark) / <alpha-value>)',
+                charcoal: 'oklch(var(--charcoal) / <alpha-value>)'
             },
             borderRadius: {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
                 sm: 'calc(var(--radius) - 4px)'
             },
-            boxShadow: {
-                xs: '0 1px 2px 0 rgba(0,0,0,0.05)'
-            },
             fontFamily: {
-                sans: [
-                    'Inter',
-                    'system-ui',
-                    '-apple-system',
-                    'BlinkMacSystemFont',
-                    'Segoe UI',
-                    'Roboto',
-                    'sans-serif'
-                ]
+                sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                display: ['Playfair Display', 'serif']
             },
             keyframes: {
                 'accordion-down': {

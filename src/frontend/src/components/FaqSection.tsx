@@ -1,86 +1,84 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+
+const FAQS = [
+  {
+    q: "How do I book a cab from Nashik to Pune?",
+    a: "Simply fill out the booking form above with your pickup location, drop location, date, time, and car preference. Click 'Book Now' and you'll be redirected to WhatsApp to confirm your booking.",
+  },
+  {
+    q: "What is the distance between Nashik and Pune?",
+    a: "The distance from Nashik to Pune via NH 60 is approximately 165 km. The journey typically takes 3\u20134 hours depending on traffic conditions.",
+  },
+  {
+    q: "Are toll fees included in the fare?",
+    a: "No, toll fees are not included in the quoted fare. Tolls will be charged extra based on the actual tolls encountered during your journey.",
+  },
+  {
+    q: "What types of vehicles are available?",
+    a: "We offer Sedans (Swift Dzire, Ciaz) and SUVs (Ertiga, XL6, Kia Carens, Innova, Innova Crysta, Tavera). Choose the vehicle that best suits your comfort and budget.",
+  },
+  {
+    q: "Is the service available 24/7?",
+    a: "Yes! Our cab service operates 24 hours a day, 7 days a week. You can book anytime, even for early morning or late night pickups.",
+  },
+  {
+    q: "Can I book a cab for Mumbai routes?",
+    a: "Absolutely! We provide cab services for Mumbai\u2013Pune, Mumbai\u2013Nashik routes as well, in addition to Nashik\u2013Pune and local Nashik rides.",
+  },
+  {
+    q: "How do I cancel or modify my booking?",
+    a: "For cancellations or modifications, please call us immediately at +91 91588 18546 or send a message on WhatsApp. We'll do our best to accommodate changes.",
+  },
+  {
+    q: "Are the drivers experienced and verified?",
+    a: "Yes, all our drivers are professionally trained, licensed, and background-verified. Your safety and comfort are our top priority.",
+  },
+];
 
 export default function FaqSection() {
-  const faqs = [
-    {
-      question: "How do I book a cab from Nashik to Pune?",
-      answer:
-        "You can book a cab through our online booking form above or call us directly at +91 98765 43210. Simply provide your travel details, and we will confirm your booking within minutes.",
-    },
-    {
-      question: "What is the fare for Nashik to Pune taxi?",
-      answer:
-        "The fare varies based on the vehicle type. Sedan starts from ₹2,500-₹3,000, SUV from ₹3,500-₹4,500, and Tempo Traveller from ₹5,500-₹7,000. These are approximate prices for one-way trips and may vary based on specific requirements.",
-    },
-    {
-      question: "How long does the journey take?",
-      answer:
-        "The journey from Nashik to Pune typically takes 3-4 hours, covering approximately 165 km via NH 60. The actual duration may vary depending on traffic conditions and the specific pickup and drop locations.",
-    },
-    {
-      question: "Are your drivers verified and experienced?",
-      answer:
-        "Yes, all our drivers are professionally trained, verified, and have extensive experience driving on the Nashik-Pune route. They are courteous, punctual, and prioritize passenger safety and comfort.",
-    },
-    {
-      question: "Can I book a round trip?",
-      answer:
-        'Absolutely! We offer both one-way and round-trip services. When booking, simply select "Round Trip" in the trip type field. Round-trip bookings often come with better rates.',
-    },
-    {
-      question: "What is your cancellation policy?",
-      answer:
-        "We understand plans can change. You can cancel your booking up to 6 hours before the scheduled pickup time for a full refund. Cancellations made within 6 hours may incur a small cancellation fee.",
-    },
-    {
-      question: "Do you provide pickup from Nashik Airport or Railway Station?",
-      answer:
-        "Yes, we provide pickup services from Nashik Airport, Nashik Road Railway Station, and any other location within Nashik city. Just specify your exact pickup location when booking.",
-    },
-    {
-      question: "Are there any hidden charges?",
-      answer:
-        "No, we believe in complete transparency. The price quoted includes driver charges, fuel, and toll taxes. There are no hidden charges. Any additional stops or waiting time will be communicated and charged separately if applicable.",
-    },
-  ];
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section className="bg-muted/30 py-16 md:py-20">
-      <div className="container">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl">
-            Frequently Asked <span className="text-saffron">Questions</span>
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Find answers to common questions about our Nashik to Pune cab
-            service
-          </p>
-        </div>
-
-        <div className="mx-auto max-w-3xl">
-          <Accordion type="single" collapsible className="space-y-4">
-            {faqs.map((faq, index) => (
-              <AccordionItem
-                key={faq.question}
-                value={`item-${index}`}
-                className="rounded-lg border bg-card px-6 shadow-sm"
-              >
-                <AccordionTrigger className="text-left hover:no-underline">
-                  <span className="font-semibold">{faq.question}</span>
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+    <div>
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-bold mb-3" style={{ color: "#1c1007" }}>
+          Frequently Asked Questions
+        </h2>
+        <p className="text-gray-600">Got questions? We've got answers.</p>
       </div>
-    </section>
+      <div className="space-y-3" data-ocid="faqs.list">
+        {FAQS.map((faq, i) => (
+          <div
+            key={faq.q}
+            data-ocid={`faqs.item.${i + 1}`}
+            className="rounded-xl border overflow-hidden"
+            style={{ borderColor: "#fde68a" }}
+          >
+            <button
+              type="button"
+              className="w-full text-left px-6 py-4 flex items-center justify-between font-semibold text-sm hover:bg-amber-50 transition-colors"
+              style={{ color: "#78350f" }}
+              onClick={() => setOpen(open === i ? null : i)}
+            >
+              <span>{faq.q}</span>
+              {open === i ? (
+                <ChevronUp className="h-4 w-4 shrink-0" />
+              ) : (
+                <ChevronDown className="h-4 w-4 shrink-0" />
+              )}
+            </button>
+            {open === i && (
+              <div
+                className="px-6 pb-4 text-sm text-gray-700 border-t"
+                style={{ borderColor: "#fde68a", backgroundColor: "#fffbeb" }}
+              >
+                <p className="pt-3">{faq.a}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

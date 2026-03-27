@@ -1,400 +1,205 @@
-import {
-  Calendar,
-  Car,
-  Clock,
-  IndianRupee,
-  Loader2,
-  MapPin,
-  Navigation,
-  Package,
-  Phone as PhoneIcon,
-  Search,
-  User,
-  Users,
-} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2, Search } from "lucide-react";
 import { useState } from "react";
-import { type Booking, CarCategory, CarModel } from "../backend";
-import { useFindBookingByPhone } from "../hooks/useFindBookingByPhone";
-import { useGetBookingById } from "../hooks/useGetBookingById";
-import { Alert, AlertDescription } from "./ui/alert";
-import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+import type { Booking } from "../backend";
+import { useActor } from "../hooks/useActor";
 
-const CAR_CATEGORY_LABELS: Record<CarCategory, string> = {
-  [CarCategory.sedan]: "Sedan",
-  [CarCategory.suv]: "SUV",
-  [CarCategory.hatchback]: "Hatchback",
-  [CarCategory.luxury]: "Luxury",
+const CAR_MODEL_LABELS: Record<string, string> = {
+  swiftDzire: "Swift Dzire",
+  marutiCiaz: "Ciaz",
+  hyundaiAura: "Aura",
+  toyotaEtios: "Etios",
+  hondaCity: "Honda City",
+  ertiga: "Ertiga",
+  xl6: "XL6",
+  kiaCarens: "Kia Carens",
+  innova: "Innova",
+  innovaCrysta: "Innova Crysta",
+  tavera: "Tavera",
+  hondaAmaze: "Honda Amaze",
+  hyundaiXcent: "Hyundai Xcent",
+  alto: "Alto",
+  swift: "Swift",
+  wagonR: "WagonR",
+  scorpio: "Scorpio",
 };
-
-const CAR_MODEL_LABELS: Record<CarModel, string> = {
-  [CarModel.swiftDzire]: "Swift Dzire",
-  [CarModel.hondaAmaze]: "Honda Amaze",
-  [CarModel.hyundaiXcent]: "Hyundai Xcent",
-  [CarModel.marutiCiaz]: "Maruti Ciaz",
-  [CarModel.innovaCrysta]: "Innova Crysta",
-  [CarModel.ertiga]: "Ertiga",
-  [CarModel.scorpio]: "Scorpio",
-  [CarModel.swift]: "Swift",
-  [CarModel.wagonR]: "WagonR",
-  [CarModel.alto]: "Alto",
-  [CarModel.mercedesEClass]: "Mercedes E-Class",
-  [CarModel.bmw5Series]: "BMW 5 Series",
-  [CarModel.audiA6]: "Audi A6",
-  [CarModel.xl6]: "Maruti XL6",
-  [CarModel.kiaCarens]: "Kia Carens",
-  [CarModel.innova]: "Toyota Innova",
-  [CarModel.tavera]: "Chevrolet Tavera",
-};
-
-function BookingCard({
-  referenceId,
-  booking,
-}: { referenceId: string; booking: Booking }) {
-  const formatTimestamp = (ts: bigint) => {
-    const date = new Date(Number(ts) / 1_000_000);
-    return date.toLocaleString("en-IN", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-  };
-
-  return (
-    <div className="mt-6 space-y-4 rounded-xl border-2 border-saffron/30 bg-saffron/5 p-5">
-      <div className="flex items-center justify-between">
-        <h4 className="text-lg font-bold text-foreground">Booking Found</h4>
-        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
-          Confirmed
-        </span>
-      </div>
-
-      {/* Reference ID */}
-      <div className="rounded-lg bg-saffron/10 p-3 text-center">
-        <p className="text-xs font-medium text-muted-foreground">
-          Booking Reference ID
-        </p>
-        <p className="mt-0.5 text-xl font-bold tracking-wide text-saffron">
-          {referenceId}
-        </p>
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        {/* Passenger */}
-        <div className="flex items-start gap-3 rounded-lg border bg-background p-3">
-          <User className="mt-0.5 h-4 w-4 text-saffron" />
-          <div>
-            <p className="text-xs text-muted-foreground">Passenger</p>
-            <p className="font-semibold">{booking.name}</p>
-          </div>
-        </div>
-
-        {/* Phone */}
-        <div className="flex items-start gap-3 rounded-lg border bg-background p-3">
-          <PhoneIcon className="mt-0.5 h-4 w-4 text-saffron" />
-          <div>
-            <p className="text-xs text-muted-foreground">Phone</p>
-            <p className="font-semibold">{booking.phone}</p>
-          </div>
-        </div>
-
-        {/* Vehicle */}
-        <div className="flex items-start gap-3 rounded-lg border bg-background p-3">
-          <Car className="mt-0.5 h-4 w-4 text-saffron" />
-          <div>
-            <p className="text-xs text-muted-foreground">Vehicle</p>
-            <p className="font-semibold">
-              {CAR_CATEGORY_LABELS[booking.carCategory] ?? booking.carCategory}
-              {" — "}
-              {CAR_MODEL_LABELS[booking.carModel] ?? booking.carModel}
-            </p>
-          </div>
-        </div>
-
-        {/* Booked On */}
-        <div className="flex items-start gap-3 rounded-lg border bg-background p-3">
-          <Calendar className="mt-0.5 h-4 w-4 text-saffron" />
-          <div>
-            <p className="text-xs text-muted-foreground">Booked On</p>
-            <p className="font-semibold">
-              {formatTimestamp(booking.timestamp)}
-            </p>
-          </div>
-        </div>
-
-        {/* Seats */}
-        <div className="flex items-start gap-3 rounded-lg border bg-background p-3">
-          <Users className="mt-0.5 h-4 w-4 text-saffron" />
-          <div>
-            <p className="text-xs text-muted-foreground">Seats</p>
-            <p className="font-semibold">
-              {Number(booking.seats)} seat
-              {Number(booking.seats) !== 1 ? "s" : ""}
-            </p>
-          </div>
-        </div>
-
-        {/* Luggage */}
-        <div className="flex items-start gap-3 rounded-lg border bg-background p-3">
-          <Package className="mt-0.5 h-4 w-4 text-saffron" />
-          <div>
-            <p className="text-xs text-muted-foreground">Luggage</p>
-            <p className="font-semibold">
-              {Number(booking.luggage.count)} bag
-              {Number(booking.luggage.count) !== 1 ? "s" : ""}
-              {booking.luggage.details ? ` — ${booking.luggage.details}` : ""}
-            </p>
-          </div>
-        </div>
-
-        {/* Price */}
-        <div className="flex items-start gap-3 rounded-lg border bg-background p-3">
-          <IndianRupee className="mt-0.5 h-4 w-4 text-saffron" />
-          <div>
-            <p className="text-xs text-muted-foreground">Price</p>
-            <p className="font-semibold text-saffron">
-              {Number(booking.price) > 0
-                ? `₹${Number(booking.price).toLocaleString("en-IN")}`
-                : "To be confirmed"}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stops */}
-      {booking.stops && booking.stops.length > 0 && (
-        <div className="rounded-lg border bg-background p-3">
-          <div className="mb-2 flex items-center gap-2">
-            <Navigation className="h-4 w-4 text-saffron" />
-            <p className="text-xs font-semibold text-muted-foreground">Stops</p>
-          </div>
-          <ol className="space-y-1">
-            {booking.stops.map((stop, i) => (
-              <li key={stop} className="flex items-center gap-2 text-sm">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-saffron/20 text-xs font-bold text-saffron">
-                  {i + 1}
-                </span>
-                {stop}
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-    </div>
-  );
-}
-
-type SearchMode = "phone" | "id";
 
 export default function BookingLookup() {
-  const [mode, setMode] = useState<SearchMode>("phone");
-  const [phoneInput, setPhoneInput] = useState("");
-  const [idInput, setIdInput] = useState("");
-  const [searchedId, setSearchedId] = useState("");
-  const [notFound, setNotFound] = useState(false);
-  const [foundByPhone, setFoundByPhone] = useState<[string, Booking] | null>(
-    null,
-  );
+  const [bookingId, setBookingId] = useState("");
+  const [result, setResult] = useState<(Booking & { id: string }) | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [searched, setSearched] = useState(false);
+  const { actor, isFetching: actorLoading } = useActor();
 
-  const {
-    mutate: findByPhone,
-    isPending: phoneSearching,
-    reset: resetPhoneError,
-  } = useFindBookingByPhone();
-  const { data: bookingById, isLoading: idSearching } =
-    useGetBookingById(searchedId);
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedId = bookingId.trim();
+    if (!trimmedId) return;
 
-  const handlePhoneSearch = () => {
-    if (!phoneInput.trim()) return;
-    setNotFound(false);
-    setFoundByPhone(null);
-    resetPhoneError();
-    findByPhone(phoneInput.trim(), {
-      onSuccess: (result) => {
-        if (result && Array.isArray(result) && result.length === 2) {
-          setFoundByPhone(result as [string, Booking]);
-          setNotFound(false);
-        } else {
-          setFoundByPhone(null);
-          setNotFound(true);
-        }
-      },
-      onError: (err: unknown) => {
-        setFoundByPhone(null);
-        const msg = err instanceof Error ? err.message : String(err ?? "");
-        if (
-          msg.toLowerCase().includes("does not exist") ||
-          msg.toLowerCase().includes("not found")
-        ) {
-          setNotFound(true);
-        } else {
-          setNotFound(true);
-        }
-      },
-    });
-  };
+    setLoading(true);
+    setError("");
+    setResult(null);
+    setSearched(true);
 
-  const handleIdSearch = () => {
-    if (!idInput.trim()) return;
-    setNotFound(false);
-    setSearchedId(idInput.trim());
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      if (mode === "phone") handlePhoneSearch();
-      else handleIdSearch();
+    try {
+      if (!actor) {
+        setError("Connection not ready. Please wait a moment and try again.");
+        return;
+      }
+      const booking = await actor.getBookingById(trimmedId);
+      if (booking == null) {
+        setError("No booking found with this ID. Please check and try again.");
+      } else {
+        setResult({ id: trimmedId, ...booking });
+      }
+    } catch (err) {
+      console.error("Booking lookup error:", err);
+      setError("Failed to look up booking. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const showIdNotFound = searchedId && !idSearching && bookingById === null;
-  const isSearching = phoneSearching || idSearching;
+  const carModelLabel = result
+    ? (CAR_MODEL_LABELS[result.carModel as string] ?? String(result.carModel))
+    : "";
 
   return (
-    <section className="bg-muted/30 py-12 md:py-16">
-      <div className="container">
-        <div className="mx-auto max-w-2xl">
-          <div className="mb-8 text-center">
-            <h2 className="mb-3 text-3xl font-bold tracking-tight">
-              Track Your <span className="text-saffron">Booking</span>
-            </h2>
-            <p className="text-muted-foreground">
-              Enter your phone number or booking reference ID to view your
-              booking details
-            </p>
-          </div>
-
-          <Card className="border-2 shadow-lg">
-            <CardHeader className="bg-gradient-to-r from-saffron/10 to-saffron/5 pb-4">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Search className="h-5 w-5 text-saffron" />
-                Find My Booking
-              </CardTitle>
-              <CardDescription>
-                Search by phone number or booking reference ID
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-5">
-              {/* Mode Toggle */}
-              <div className="mb-5 flex rounded-lg border border-border bg-muted/40 p-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMode("phone");
-                    setNotFound(false);
-                    setFoundByPhone(null);
-                    resetPhoneError();
-                  }}
-                  className={`flex-1 rounded-md py-2 text-sm font-semibold transition-all ${
-                    mode === "phone"
-                      ? "bg-saffron text-charcoal shadow"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  By Phone Number
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMode("id");
-                    setNotFound(false);
-                    setSearchedId("");
-                  }}
-                  className={`flex-1 rounded-md py-2 text-sm font-semibold transition-all ${
-                    mode === "id"
-                      ? "bg-saffron text-charcoal shadow"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  By Booking ID
-                </button>
-              </div>
-
-              {mode === "phone" ? (
-                <div className="space-y-3">
-                  <Label htmlFor="lookup-phone">Phone Number</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="lookup-phone"
-                      type="tel"
-                      placeholder="+91 98765 43210"
-                      value={phoneInput}
-                      onChange={(e) => setPhoneInput(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      className="flex-1"
-                    />
-                    <Button
-                      onClick={handlePhoneSearch}
-                      disabled={isSearching || !phoneInput.trim()}
-                      className="bg-saffron text-charcoal hover:bg-saffron/90"
-                    >
-                      {phoneSearching ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Search className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <Label htmlFor="lookup-id">Booking Reference ID</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="lookup-id"
-                      placeholder="e.g. 1234567890BK"
-                      value={idInput}
-                      onChange={(e) => setIdInput(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      className="flex-1 font-mono"
-                    />
-                    <Button
-                      onClick={handleIdSearch}
-                      disabled={isSearching || !idInput.trim()}
-                      className="bg-saffron text-charcoal hover:bg-saffron/90"
-                    >
-                      {idSearching ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Search className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {/* Not Found */}
-              {(notFound || showIdNotFound) && (
-                <Alert className="mt-4" variant="destructive">
-                  <AlertDescription>
-                    No booking found. Please check your{" "}
-                    {mode === "phone" ? "phone number" : "booking reference ID"}{" "}
-                    and try again.
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {/* Results */}
-              {mode === "phone" && foundByPhone && (
-                <BookingCard
-                  referenceId={foundByPhone[0]}
-                  booking={foundByPhone[1]}
-                />
-              )}
-              {mode === "id" && searchedId && bookingById && (
-                <BookingCard referenceId={searchedId} booking={bookingById} />
-              )}
-            </CardContent>
-          </Card>
-        </div>
+    <div>
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold mb-3" style={{ color: "#1c1007" }}>
+          Find My Booking
+        </h2>
+        <p className="text-gray-600 text-sm">
+          Enter your Booking ID to retrieve your booking details.
+        </p>
       </div>
-    </section>
+
+      <form onSubmit={handleSearch} className="flex gap-2">
+        <div className="flex-1">
+          <Label htmlFor="bookingId" className="sr-only">
+            Booking ID
+          </Label>
+          <Input
+            id="bookingId"
+            data-ocid="booking_lookup.search_input"
+            placeholder="Enter Booking ID (e.g. B-001)"
+            value={bookingId}
+            onChange={(e) => setBookingId(e.target.value)}
+            disabled={loading}
+          />
+        </div>
+        <Button
+          type="submit"
+          data-ocid="booking_lookup.submit_button"
+          disabled={loading || !bookingId.trim() || actorLoading}
+          className="text-white"
+          style={{ backgroundColor: "#d97706" }}
+        >
+          {loading || actorLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Search className="h-4 w-4" />
+          )}
+        </Button>
+      </form>
+
+      {actorLoading && !searched && (
+        <p className="mt-3 text-sm text-amber-600 flex items-center gap-2">
+          <Loader2 className="h-3 w-3 animate-spin" /> Connecting...
+        </p>
+      )}
+
+      {error && (
+        <div
+          data-ocid="booking_lookup.error_state"
+          className="mt-4 p-4 rounded-lg text-sm text-red-700 bg-red-50 border border-red-200"
+        >
+          {error}
+        </div>
+      )}
+
+      {result && (
+        <div
+          data-ocid="booking_lookup.success_state"
+          className="mt-4 rounded-xl border overflow-hidden"
+          style={{ borderColor: "#fde68a" }}
+        >
+          <div
+            className="px-4 py-3 font-semibold text-sm"
+            style={{ backgroundColor: "#d97706", color: "white" }}
+          >
+            Booking Found — ID: {result.id}
+          </div>
+          <div
+            className="p-4 text-sm space-y-2"
+            style={{ backgroundColor: "#fffbeb" }}
+          >
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <span className="font-medium" style={{ color: "#78350f" }}>
+                  Name:
+                </span>
+                <span className="ml-2">{result.name}</span>
+              </div>
+              <div>
+                <span className="font-medium" style={{ color: "#78350f" }}>
+                  Phone:
+                </span>
+                <span className="ml-2">{result.phone}</span>
+              </div>
+              <div>
+                <span className="font-medium" style={{ color: "#78350f" }}>
+                  Car:
+                </span>
+                <span className="ml-2">
+                  {result.carCategory
+                    ? `${String(result.carCategory).toUpperCase()} — `
+                    : ""}
+                  {carModelLabel}
+                </span>
+              </div>
+              <div>
+                <span className="font-medium" style={{ color: "#78350f" }}>
+                  Seats:
+                </span>
+                <span className="ml-2">{String(result.seats)}</span>
+              </div>
+              <div>
+                <span className="font-medium" style={{ color: "#78350f" }}>
+                  Fare:
+                </span>
+                <span className="ml-2">₹{String(result.price)}</span>
+              </div>
+              <div>
+                <span className="font-medium" style={{ color: "#78350f" }}>
+                  Luggage:
+                </span>
+                <span className="ml-2">
+                  {String(result.luggage?.count ?? 0)} bag(s)
+                </span>
+              </div>
+            </div>
+            {result.stops && result.stops.length > 0 && (
+              <div>
+                <span className="font-medium" style={{ color: "#78350f" }}>
+                  Trip Details:
+                </span>
+                <ul className="mt-1 space-y-1">
+                  {(result.stops as string[]).map((s) => (
+                    <li key={s} className="text-gray-600 text-xs">
+                      • {s}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

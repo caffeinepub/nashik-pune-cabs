@@ -1,3 +1,19 @@
+interface BookingData {
+  name: string;
+  phone: string;
+  pickup: string;
+  drop: string;
+  date: string;
+  time: string;
+  tripType: string;
+  carType: string;
+  carCategory?: any;
+  carModel?: any;
+  price?: number;
+  stops?: string[];
+  luggage?: { count: number; details: string };
+  seats?: number;
+}
 import {
   Calendar,
   Car,
@@ -12,7 +28,7 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
-import type { BookingData } from "../App";
+
 import { CarCategory, CarModel } from "../backend";
 import { Button } from "./ui/button";
 import {

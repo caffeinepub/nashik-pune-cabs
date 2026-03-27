@@ -68,15 +68,15 @@ export default function RouteInfoSection() {
       className="py-16 text-white md:py-20"
       style={{
         background:
-          "linear-gradient(135deg, #1a1710 0%, #2a2418 50%, #1a1710 100%)",
+          "linear-gradient(135deg, #1c1410 0%, #2d1e0a 40%, #3d2a0e 70%, #1c1410 100%)",
       }}
     >
       <div className="container">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl">
-            Route <span className="text-saffron">Information</span>
+            Route <span style={{ color: "#f59e0b" }}>Information</span>
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-gray-200">
+          <p className="mx-auto max-w-2xl text-lg text-amber-200">
             Everything you need to know about the Nashik ↔ Pune journey
           </p>
         </div>
@@ -88,19 +88,22 @@ export default function RouteInfoSection() {
             return (
               <Card
                 key={detail.label}
-                className="border-white/10 backdrop-blur"
-                style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
+                className="border-amber-500/30 backdrop-blur"
+                style={{ backgroundColor: "rgba(245,158,11,0.15)" }}
               >
                 <CardContent className="flex items-start gap-4 p-6">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-saffron">
-                    <Icon className="h-6 w-6 text-charcoal" />
+                  <div
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
+                    style={{ background: "#f59e0b" }}
+                  >
+                    <Icon className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-300">{detail.label}</p>
+                    <p className="text-sm text-amber-300">{detail.label}</p>
                     <p className="text-2xl font-bold text-white">
                       {detail.value}
                     </p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-amber-400">
                       {detail.description}
                     </p>
                   </div>
@@ -110,28 +113,34 @@ export default function RouteInfoSection() {
           })}
         </div>
 
-        {/* Nashik ↔ Pune Pickup and Drop Points */}
+        {/* Nashik → Pune */}
         <div className="mb-8">
-          <h3 className="mb-6 text-center text-xl font-bold text-saffron">
+          <h3
+            className="mb-6 text-center text-xl font-bold"
+            style={{ color: "#fcd34d" }}
+          >
             Nashik → Pune
           </h3>
           <div className="grid gap-8 lg:grid-cols-2">
             <Card
-              className="border-white/10 backdrop-blur"
-              style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
+              className="border-amber-500/30 backdrop-blur"
+              style={{ backgroundColor: "rgba(245,158,11,0.15)" }}
             >
               <CardContent className="p-6">
                 <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-                  <MapPin className="h-5 w-5 text-saffron" />
+                  <MapPin className="h-5 w-5" style={{ color: "#f59e0b" }} />
                   Popular Pickup Points in Nashik
                 </h4>
                 <ul className="space-y-2">
                   {nashikPickupPoints.map((point) => (
                     <li
                       key={point}
-                      className="flex items-center gap-2 text-gray-200"
+                      className="flex items-center gap-2 text-amber-200"
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-saffron" />
+                      <span
+                        className="h-1.5 w-1.5 rounded-full"
+                        style={{ background: "#f59e0b" }}
+                      />
                       {point}
                     </li>
                   ))}
@@ -140,21 +149,24 @@ export default function RouteInfoSection() {
             </Card>
 
             <Card
-              className="border-white/10 backdrop-blur"
-              style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
+              className="border-amber-500/30 backdrop-blur"
+              style={{ backgroundColor: "rgba(245,158,11,0.15)" }}
             >
               <CardContent className="p-6">
                 <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-                  <MapPin className="h-5 w-5 text-saffron" />
+                  <MapPin className="h-5 w-5" style={{ color: "#f59e0b" }} />
                   Popular Drop Points in Pune
                 </h4>
                 <ul className="space-y-2">
                   {puneDropPoints.map((point) => (
                     <li
                       key={point}
-                      className="flex items-center gap-2 text-gray-200"
+                      className="flex items-center gap-2 text-amber-200"
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-saffron" />
+                      <span
+                        className="h-1.5 w-1.5 rounded-full"
+                        style={{ background: "#f59e0b" }}
+                      />
                       {point}
                     </li>
                   ))}
@@ -166,26 +178,32 @@ export default function RouteInfoSection() {
 
         {/* Pune → Nashik */}
         <div>
-          <h3 className="mb-6 text-center text-xl font-bold text-saffron">
+          <h3
+            className="mb-6 text-center text-xl font-bold"
+            style={{ color: "#fcd34d" }}
+          >
             Pune → Nashik
           </h3>
           <div className="grid gap-8 lg:grid-cols-2">
             <Card
-              className="border-white/10 backdrop-blur"
-              style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
+              className="border-amber-500/30 backdrop-blur"
+              style={{ backgroundColor: "rgba(245,158,11,0.15)" }}
             >
               <CardContent className="p-6">
                 <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-                  <MapPin className="h-5 w-5 text-saffron" />
+                  <MapPin className="h-5 w-5" style={{ color: "#f59e0b" }} />
                   Popular Pickup Points in Pune
                 </h4>
                 <ul className="space-y-2">
                   {punePickupPoints.map((point) => (
                     <li
                       key={point}
-                      className="flex items-center gap-2 text-gray-200"
+                      className="flex items-center gap-2 text-amber-200"
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-saffron" />
+                      <span
+                        className="h-1.5 w-1.5 rounded-full"
+                        style={{ background: "#f59e0b" }}
+                      />
                       {point}
                     </li>
                   ))}
@@ -194,21 +212,24 @@ export default function RouteInfoSection() {
             </Card>
 
             <Card
-              className="border-white/10 backdrop-blur"
-              style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
+              className="border-amber-500/30 backdrop-blur"
+              style={{ backgroundColor: "rgba(245,158,11,0.15)" }}
             >
               <CardContent className="p-6">
                 <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-                  <MapPin className="h-5 w-5 text-saffron" />
+                  <MapPin className="h-5 w-5" style={{ color: "#f59e0b" }} />
                   Popular Drop Points in Nashik
                 </h4>
                 <ul className="space-y-2">
                   {nashikDropPoints.map((point) => (
                     <li
                       key={point}
-                      className="flex items-center gap-2 text-gray-200"
+                      className="flex items-center gap-2 text-amber-200"
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-saffron" />
+                      <span
+                        className="h-1.5 w-1.5 rounded-full"
+                        style={{ background: "#f59e0b" }}
+                      />
                       {point}
                     </li>
                   ))}
