@@ -1,49 +1,49 @@
 import type { Principal } from '@dfinity/principal';
 
+export type CarCategory = { sedan: null } | { suv: null };
+export type CarModel =
+  | { swiftDzire: null }
+  | { marutiCiaz: null }
+  | { hyundaiXcent: null }
+  | { wagonR: null }
+  | { hondaAmaze: null }
+  | { ertiga: null }
+  | { xl6: null }
+  | { kiaCarens: null }
+  | { innova: null }
+  | { innovaCrysta: null }
+  | { tavera: null };
 export type BookingStatus = { pending: null } | { confirmed: null } | { cancelled: null };
-
+export interface Luggage { count: bigint; details: string; }
 export interface Booking {
   id: string;
-  customerName: string;
+  name: string;
   phone: string;
-  email: string;
-  pickupLocation: string;
-  dropLocation: string;
-  route: string;
-  date: string;
-  time: string;
-  carType: string;
-  carModel: string;
-  seats: bigint;
-  luggage: bigint;
+  carCategory: CarCategory;
+  carModel: CarModel;
+  price: bigint;
   stops: string[];
-  fare: string;
+  luggage: Luggage;
+  seats: bigint;
   status: BookingStatus;
   createdAt: bigint;
 }
 
 export interface _SERVICE {
-  claimAdmin: () => Promise<boolean>;
-  setAdmin: (p: Principal) => Promise<boolean>;
-  getAdmin: () => Promise<[] | [Principal]>;
-  isAdmin: () => Promise<boolean>;
+  initializeAdmin: () => Promise<void>;
+  hasAdmin: () => Promise<boolean>;
+  isCallerAdmin: () => Promise<boolean>;
   createBooking: (
-    customerName: string,
+    name: string,
     phone: string,
-    email: string,
-    pickupLocation: string,
-    dropLocation: string,
-    route: string,
-    date: string,
-    time: string,
-    carType: string,
-    carModel: string,
-    seats: bigint,
-    luggage: bigint,
+    carCategory: CarCategory,
+    carModel: CarModel,
+    price: bigint,
     stops: string[],
-    fare: string
+    luggage: Luggage,
+    seats: bigint
   ) => Promise<string>;
-  getBooking: (id: string) => Promise<[] | [Booking]>;
-  getAllBookings: () => Promise<Booking[]>;
+  getBookingById: (id: string) => Promise<[] | [Booking]>;
+  getAllBookingsWithIdsSorted: () => Promise<[string, Booking][]>;
   updateBookingStatus: (id: string, status: BookingStatus) => Promise<boolean>;
 }

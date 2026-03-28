@@ -53,8 +53,12 @@ export default function BookingLookup() {
     setResult(null);
     setSearched(true);
     try {
-      const booking = await actor!.getBookingById(id);
-      if (booking == null) {
+      const response = await actor!.getBookingById(id);
+      // Candid optional returns [] for None and [Booking] for Some
+      const booking: Booking | undefined = Array.isArray(response)
+        ? (response as Booking[])[0]
+        : undefined;
+      if (!booking) {
         setError("No booking found with this ID. Please check and try again.");
       } else {
         setResult({ id, ...booking });
@@ -85,8 +89,23 @@ export default function BookingLookup() {
     await doSearch(trimmedId);
   };
 
-  const carModelLabel = result
-    ? (CAR_MODEL_LABELS[result.carModel as string] ?? String(result.carModel))
+  const getCarModelKey = (carModel: unknown): string => {
+    if (!carModel) return "";
+    if (typeof carModel === "string") return carModel;
+    // Candid variant is an object like { swiftDzire: null }
+    return Object.keys(carModel as object)[0] ?? "";
+  };
+
+  const getCarCategoryKey = (carCategory: unknown): string => {
+    if (!carCategory) return "";
+    if (typeof carCategory === "string") return carCategory;
+    return Object.keys(carCategory as object)[0] ?? "";
+  };
+
+  const carModelKey = result ? getCarModelKey(result.carModel) : "";
+  const carModelLabel = CAR_MODEL_LABELS[carModelKey] ?? carModelKey;
+  const carCategoryLabel = result
+    ? getCarCategoryKey(result.carCategory).toUpperCase()
     : "";
 
   return (
@@ -185,9 +204,7 @@ export default function BookingLookup() {
                   Car:
                 </span>
                 <span className="ml-2">
-                  {result.carCategory
-                    ? `${String(result.carCategory).toUpperCase()} — `
-                    : ""}
+                  {carCategoryLabel ? `${carCategoryLabel} — ` : ""}
                   {carModelLabel}
                 </span>
               </div>
