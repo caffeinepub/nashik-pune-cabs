@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import AboutSection from "./components/AboutSection";
 import AdminPage from "./components/AdminPage";
 import BookingForm from "./components/BookingForm";
-import BookingLookup from "./components/BookingLookup";
 import ContactSection from "./components/ContactSection";
 import FaqSection from "./components/FaqSection";
 import FooterSection from "./components/FooterSection";
@@ -186,21 +185,21 @@ function LandingPage() {
                 distance: "~165 km",
                 duration: "3\u20134 hours",
                 via: "NH 60",
-                fare: "\u20b93,500 \u2013 \u20b94,500",
+                fare: "\u20b93,200 \u2013 \u20b97,000",
               },
               {
                 route: "Mumbai \u2192 Pune",
                 distance: "~150 km",
                 duration: "2.5\u20133.5 hours",
                 via: "Mumbai Pune Expressway",
-                fare: "\u20b93,000 \u2013 \u20b94,000",
+                fare: "\u20b93,200 \u2013 \u20b97,000",
               },
               {
                 route: "Mumbai \u2192 Nashik",
                 distance: "~167 km",
                 duration: "3\u20134 hours",
                 via: "NH 3",
-                fare: "\u20b94,500 \u2013 \u20b95,500",
+                fare: "\u20b93,200 \u2013 \u20b97,000",
               },
             ].map((r) => (
               <div
@@ -247,13 +246,6 @@ function LandingPage() {
       <section id="about" className="py-16 bg-white">
         <div className="container">
           <AboutSection />
-        </div>
-      </section>
-
-      {/* Find My Booking */}
-      <section className="py-16" style={{ backgroundColor: "#fffbeb" }}>
-        <div className="container max-w-lg mx-auto">
-          <BookingLookup />
         </div>
       </section>
 

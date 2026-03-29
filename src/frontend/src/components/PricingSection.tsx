@@ -1,34 +1,29 @@
 export default function PricingSection() {
-  const routes = [
+  const carPricing = [
     {
-      route: "Nashik → Pune",
-      distance: "~165 km",
-      sedan: "₹3,500",
-      suv: "₹4,500",
+      type: "Sedan",
+      models: "Swift Dzire, Ciaz, Aura, Etios, Honda City",
+      price: "\u20b93,200",
     },
     {
-      route: "Pune → Nashik",
-      distance: "~165 km",
-      sedan: "₹3,500",
-      suv: "₹4,500",
+      type: "SUV - Ertiga",
+      models: "Ertiga, XL6",
+      price: "\u20b93,900",
     },
     {
-      route: "Mumbai → Pune",
-      distance: "~150 km",
-      sedan: "₹3,000",
-      suv: "₹4,000",
+      type: "SUV - Premium",
+      models: "Kia Carens",
+      price: "\u20b94,500",
     },
     {
-      route: "Mumbai → Nashik",
-      distance: "~167 km",
-      sedan: "₹4,500",
-      suv: "₹5,500",
+      type: "SUV - Luxury",
+      models: "Innova, Tavera",
+      price: "\u20b93,500",
     },
     {
-      route: "Nashik Local",
-      distance: "City rides",
-      sedan: "₹1,500",
-      suv: "₹2,000",
+      type: "SUV - Premium Luxury",
+      models: "Innova Crysta",
+      price: "\u20b97,000",
     },
   ];
 
@@ -48,23 +43,20 @@ export default function PricingSection() {
           <thead>
             <tr style={{ backgroundColor: "#d97706" }}>
               <th className="text-left px-6 py-4 text-white font-semibold">
-                Route
+                Car Type
               </th>
               <th className="text-left px-6 py-4 text-white font-semibold">
-                Distance
+                Car Models
               </th>
               <th className="text-center px-6 py-4 text-white font-semibold">
-                🚗 Sedan
-              </th>
-              <th className="text-center px-6 py-4 text-white font-semibold">
-                🚙 SUV
+                Price per Trip
               </th>
             </tr>
           </thead>
           <tbody>
-            {routes.map((row, i) => (
+            {carPricing.map((row, i) => (
               <tr
-                key={row.route}
+                key={row.type}
                 data-ocid={`pricing.row.${i + 1}`}
                 className={i % 2 === 0 ? "bg-white" : "bg-amber-50"}
               >
@@ -72,20 +64,14 @@ export default function PricingSection() {
                   className="px-6 py-4 font-semibold"
                   style={{ color: "#78350f" }}
                 >
-                  {row.route}
+                  {row.type}
                 </td>
-                <td className="px-6 py-4 text-gray-600">{row.distance}</td>
+                <td className="px-6 py-4 text-gray-600">{row.models}</td>
                 <td
-                  className="px-6 py-4 text-center font-bold"
+                  className="px-6 py-4 text-center font-bold text-lg"
                   style={{ color: "#d97706" }}
                 >
-                  {row.sedan}
-                </td>
-                <td
-                  className="px-6 py-4 text-center font-bold"
-                  style={{ color: "#b45309" }}
-                >
-                  {row.suv}
+                  {row.price}
                 </td>
               </tr>
             ))}
@@ -100,8 +86,8 @@ export default function PricingSection() {
         <span className="text-lg">ℹ️</span>
         <div className="text-sm" style={{ color: "#78350f" }}>
           <strong>Note:</strong> All fares are excluding toll fees. Tolls vary
-          by route and will be charged extra. Fares shown are indicative — final
-          price depends on car model, traffic, and additional stops.
+          by route and will be charged extra. Prices shown are per trip — final
+          price depends on route, traffic, and additional stops.
         </div>
       </div>
     </div>

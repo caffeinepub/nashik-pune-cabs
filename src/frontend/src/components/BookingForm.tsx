@@ -22,18 +22,20 @@ const ROUTES = [
   { value: "nashik-local", label: "Nashik Local" },
 ];
 
-const ROUTE_FARES: Record<string, { sedan: number; suv: number }> = {
-  "nashik-pune": { sedan: 2900, suv: 3500 },
-  "pune-nashik": { sedan: 2900, suv: 3500 },
-  "mumbai-pune": { sedan: 2500, suv: 3000 },
-  "mumbai-nashik": { sedan: 3800, suv: 4500 },
-  "nashik-local": { sedan: 1200, suv: 1500 },
-};
-
-const getFare = (routeVal: string, carTypeVal: string): number => {
-  const fares = ROUTE_FARES[routeVal];
-  if (!fares) return 3500;
-  return carTypeVal === "sedan" ? fares.sedan : fares.suv;
+const CAR_MODEL_FARES: Record<string, number> = {
+  // Sedan models - ₹3200
+  swiftDzire: 3200,
+  marutiCiaz: 3200,
+  hyundaiXcent: 3200,
+  wagonR: 3200,
+  hondaAmaze: 3200,
+  // SUV models - individual pricing
+  ertiga: 3900,
+  kiaCarens: 4500,
+  innovaCrysta: 7000,
+  xl6: 3500,
+  innova: 3500,
+  tavera: 3500,
 };
 
 const CAR_MODELS: Record<string, { value: CarModel; label: string }[]> = {
@@ -81,7 +83,7 @@ export default function BookingForm() {
   const [seats, setSeats] = useState("");
   const [luggage, setLuggage] = useState("");
   const [stops, setStops] = useState<Stop[]>([]);
-  const [fare, setFare] = useState("2900");
+  const [fare, setFare] = useState("3200");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -94,14 +96,19 @@ export default function BookingForm() {
 
   const handleRouteChange = (val: string) => {
     setRoute(val);
-    setFare(String(getFare(val, carType)));
   };
 
   const handleCarTypeChange = (val: string) => {
     const type = val as "sedan" | "suv";
     setCarType(type);
-    setCarModel(CAR_MODELS[type][0].value);
-    setFare(String(getFare(route, type)));
+    const firstModel = CAR_MODELS[type][0];
+    setCarModel(firstModel.value);
+    setFare(String(CAR_MODEL_FARES[String(firstModel.value)] ?? 3200));
+  };
+
+  const handleCarModelChange = (val: CarModel) => {
+    setCarModel(val);
+    setFare(String(CAR_MODEL_FARES[String(val)] ?? 3200));
   };
 
   const addStop = () => {
@@ -149,7 +156,8 @@ export default function BookingForm() {
 
     const cleanedPhone = cleanPhone(phone);
     const time = `${hour}:${minute} ${ampm}`;
-    const fareNum = Number.parseFloat(fare) || getFare(route, carType);
+    const fareNum =
+      Number.parseFloat(fare) || (CAR_MODEL_FARES[String(carModel)] ?? 3200);
     const seatsNum = Number.parseInt(seats) || 1;
     const luggageNum = Number.parseInt(luggage) || 0;
     const stopValues = stops.map((s) => s.value).filter(Boolean);
@@ -396,7 +404,7 @@ export default function BookingForm() {
           </Label>
           <Select
             value={carModel}
-            onValueChange={(v) => setCarModel(v as CarModel)}
+            onValueChange={(v) => handleCarModelChange(v as CarModel)}
           >
             <SelectTrigger data-ocid="booking.carmodel.select">
               <SelectValue />
