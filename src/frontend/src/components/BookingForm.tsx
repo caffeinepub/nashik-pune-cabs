@@ -12,6 +12,7 @@ import { Loader2, Minus, Plus } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CarCategory, CarModel } from "../backend";
+import { useActor } from "../hooks/useActor";
 import { useCreateBooking } from "../hooks/useQueries";
 
 const ROUTES = [
@@ -87,6 +88,7 @@ export default function BookingForm() {
   const [email, setEmail] = useState("");
   const stopCounter = useRef(0);
 
+  const { actor, isFetching: actorLoading } = useActor();
   const { mutateAsync: createBooking, isPending } = useCreateBooking();
 
   const selectedRoute = ROUTES.find((r) => r.value === route);
@@ -144,6 +146,13 @@ export default function BookingForm() {
       return;
     }
 
+    if (!actor) {
+      toast.error(
+        "Still connecting to server. Please wait a moment and try again.",
+      );
+      return;
+    }
+
     const cleanedPhone = cleanPhone(phone);
     const time = `${hour}:${minute} ${ampm}`;
     const fareNum = Number.parseFloat(fare) || getFare(route, carType);
@@ -166,7 +175,7 @@ export default function BookingForm() {
       ...stopValues.map((s, i) => `Stop ${i + 1}: ${s}`),
     ];
 
-    let bookingId = "";
+    let bookingId: string;
     try {
       bookingId = await createBooking({
         name: name.trim(),
@@ -179,9 +188,17 @@ export default function BookingForm() {
         luggageDetails: "",
         seats: seatsNum,
       });
-    } catch {
-      // Generate a local fallback ID so customer always gets a booking reference
-      bookingId = `NPC${Date.now().toString().slice(-6)}`;
+    } catch (err) {
+      console.error("Booking creation error:", err);
+      toast.error(
+        "Failed to create booking. Please check your connection and try again.",
+      );
+      return;
+    }
+
+    if (!bookingId) {
+      toast.error("Booking failed — no ID returned. Please try again.");
+      return;
     }
 
     const stopsLine =
@@ -214,11 +231,23 @@ export default function BookingForm() {
 
     const waUrl = `https://wa.me/919158818546?text=${encodeURIComponent(msg)}`;
     window.open(waUrl, "_blank");
-    toast.success("Booking submitted! Redirecting to WhatsApp...");
+    toast.success(
+      `Booking confirmed! Your ID: ${bookingId}. Redirecting to WhatsApp...`,
+    );
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {actorLoading && (
+        <div
+          className="flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-amber-50 border border-amber-200"
+          style={{ color: "#92400e" }}
+        >
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Connecting to server...
+        </div>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
           <Label
@@ -556,13 +585,17 @@ export default function BookingForm() {
         <Button
           type="submit"
           data-ocid="booking.submit_button"
-          disabled={isPending}
+          disabled={isPending || actorLoading}
           className="flex-1 h-12 text-base font-bold text-white hover:opacity-90"
           style={{ backgroundColor: "#d97706" }}
         >
           {isPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...
+            </>
+          ) : actorLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Connecting...
             </>
           ) : (
             "Book Now"
