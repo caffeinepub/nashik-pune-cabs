@@ -146,6 +146,11 @@ export default function BookingForm() {
       return;
     }
 
+    if (!actor) {
+      toast.error("Server not connected. Please wait a moment and try again.");
+      return;
+    }
+
     const cleanedPhone = cleanPhone(phone);
     const time = `${hour}:${minute} ${ampm}`;
     const fareNum = Number.parseFloat(fare) || getFare(route, carType);
@@ -170,30 +175,21 @@ export default function BookingForm() {
 
     let bookingId: string;
     try {
-      const bookingPromise = actor
-        ? createBooking({
-            name: name.trim(),
-            phone: cleanedPhone,
-            carCategory:
-              carType === "sedan" ? CarCategory.sedan : CarCategory.suv,
-            carModel,
-            price: fareNum,
-            stops: allStops,
-            luggageCount: luggageNum,
-            luggageDetails: "",
-            seats: seatsNum,
-          })
-        : Promise.reject(new Error("No actor"));
-
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error("timeout")), 10000),
-      );
-
-      bookingId = await Promise.race([bookingPromise, timeoutPromise]);
+      bookingId = await createBooking({
+        name: name.trim(),
+        phone: cleanedPhone,
+        carCategory: carType === "sedan" ? CarCategory.sedan : CarCategory.suv,
+        carModel,
+        price: fareNum,
+        stops: allStops,
+        luggageCount: luggageNum,
+        luggageDetails: "",
+        seats: seatsNum,
+      });
       if (!bookingId) throw new Error("empty id");
     } catch {
-      // Fall back to local ID — booking still goes through via WhatsApp
-      bookingId = `NPC${Date.now().toString().slice(-6)}`;
+      toast.error("Failed to create booking. Please try again.");
+      return;
     }
 
     const stopsLine =
@@ -580,11 +576,16 @@ export default function BookingForm() {
         <Button
           type="submit"
           data-ocid="booking.submit_button"
-          disabled={isPending}
+          disabled={isPending || actorLoading}
           className="flex-1 h-12 text-base font-bold text-white hover:opacity-90"
           style={{ backgroundColor: "#d97706" }}
         >
-          {isPending ? (
+          {actorLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Connecting to
+              server...
+            </>
+          ) : isPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...
             </>
